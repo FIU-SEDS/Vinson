@@ -13,7 +13,16 @@ SFE_MMC5983MA magnetometer;
 ASM330LHHSensor mainIMU(&Wire, ASM330LHH_I2C_ADD_L);
 Adafruit_BMP3XX barometer;
 
-// Logging helper
+/*
+ * @brief Prints out a log message for the state of a given parameter.
+ *
+ * This function logs the device's operation status, indicating whether it succeeded or failed.
+ *
+ * @param device Name of the device (e.g., "Magnetometer").
+ * @param operation Description of the operation being performed (e.g., "Power Up").
+ * @param success Boolean indicating the success (true) or failure (false) of the operation.
+ * @return None. The function prints a statement to the serial log.
+ */
 void logStatus(const char *device, const char *operation, bool success)
 {
   if (success)
@@ -34,14 +43,29 @@ void logStatus(const char *device, const char *operation, bool success)
   }
 }
 
-// I2C Device Connection Check
+/*
+ * @brief First check of the I2C connection for a device.
+ *
+ * This function uses the Wire library to initiate a transmission to the specified I2C address
+ * and verifies if the device responds, indicating a successful connection.
+ *
+ * @param address I2C address of the sensor to check.
+ * @return Boolean value: true if the device is connected and responds, false otherwise.
+ */
 bool isDeviceConnected(uint8_t address)
 {
   Wire.beginTransmission(address);
   return (Wire.endTransmission() == 0); // Returns true if device responds
 }
 
-// Magnetometer
+/*
+ * @brief Powers up the Magnetometer sensor.
+ *
+ * This function checks the I2C connection to the Magnetometer. If connected, it initializes the
+ * magnetometer and performs a soft reset. Logs the status of the power-up process.
+ *
+ * @return Boolean value: true if the Magnetometer is successfully powered up, false otherwise.
+ */
 bool PowerMagnetometer()
 {
   if (!isDeviceConnected(MAGNETOMETER_ADDRESS))
@@ -56,6 +80,14 @@ bool PowerMagnetometer()
   return logStatus("Magnetometer", "Power Up", false), false;
 }
 
+/*
+ * @brief Verifies the temperature of the Main IMU sensor.
+ *
+ * This function checks if the Main IMU's temperature is within the acceptable range.
+ * Logs the result of the temperature verification.
+ *
+ * @return Boolean value: true if the temperature check passes, false otherwise.
+ */
 bool MagnetometerVerifyTemperature()
 {
   if (magnetometer.verifyTemperature())
@@ -64,6 +96,14 @@ bool MagnetometerVerifyTemperature()
   return logStatus("Magnetometer", "Temperature Check", false), false;
 }
 
+/*
+ * @brief Verifies the I2C connection of the Magnetometer sensor.
+ *
+ * This function checks if the Magnetometer is properly connected via I2C by verifying its address.
+ * Logs the result of the connection verification.
+ *
+ * @return Boolean value: true if the I2C connection is verified, false otherwise.
+ */
 bool MagnetometerVerifyConnection()
 {
   if (magnetometer.verifyConnection(MAGNETOMETER_ADDRESS))
@@ -72,7 +112,14 @@ bool MagnetometerVerifyConnection()
   return logStatus("Magnetometer", "I2C Connection", false), false;
 }
 
-// Main IMU
+/*
+ * @brief Powers up the Main IMU sensor.
+ *
+ * This function checks the I2C connection to the Main IMU. If connected, it initializes the IMU,
+ * enables the accelerometer and gyroscope, and logs the status of the power-up process.
+ *
+ * @return Boolean value: true if the Main IMU is successfully powered up, false otherwise.
+ */
 bool PowerMainIMU()
 {
   if (!isDeviceConnected(MAIN_IMU_ADDRESS))
@@ -88,6 +135,14 @@ bool PowerMainIMU()
   return logStatus("Main IMU", "Power Up", false), false;
 }
 
+/*
+ * @brief Verifies the temperature of the Main IMU sensor.
+ *
+ * This function checks if the Main IMU's temperature is within the acceptable range.
+ * Logs the result of the temperature verification.
+ *
+ * @return Boolean value: true if the temperature check passes, false otherwise.
+ */
 bool MainIMUVerifyTemperature()
 {
   if (mainIMU.verifyTemperature() == ASM330LHH_OK)
@@ -96,6 +151,14 @@ bool MainIMUVerifyTemperature()
   return logStatus("Main IMU", "Temperature Check", false), false;
 }
 
+/*
+ * @brief Verifies the I2C connection of the Main IMU sensor.
+ *
+ * This function checks if the Main IMU is properly connected via I2C by verifying its address.
+ * Logs the result of the connection verification.
+ *
+ * @return Boolean value: true if the I2C connection is verified, false otherwise.
+ */
 bool MainIMUVerifyConnection()
 {
   if (mainIMU.verifyConnection(MAIN_IMU_ADDRESS) == ASM330LHH_OK)
@@ -104,7 +167,15 @@ bool MainIMUVerifyConnection()
   return logStatus("Main IMU", "I2C Connection", false), false;
 }
 
-// Barometer
+/*
+ * @brief Powers up the Barometer sensor.
+ *
+ * This function checks the I2C connection to the Barometer. If connected, it initializes the
+ * barometer, sets oversampling rates, filter coefficients, and output data rate. Logs the status
+ * of the power-up process.
+ *
+ * @return Boolean value: true if the Barometer is successfully powered up, false otherwise.
+ */
 bool PowerBarometer()
 {
   if (!isDeviceConnected(BAROMETER_ADDRESS))
@@ -122,6 +193,14 @@ bool PowerBarometer()
   return logStatus("Barometer", "Power Up", false), false;
 }
 
+/*
+ * @brief Verifies the temperature of the Barometer sensor.
+ *
+ * This function checks if the Barometer's temperature is within the acceptable range.
+ * Logs the result of the temperature verification.
+ *
+ * @return Boolean value: true if the temperature check passes, false otherwise.
+ */
 bool BarometerVerifyTemperature()
 {
   if (barometer.verifyTemperature())
@@ -130,6 +209,14 @@ bool BarometerVerifyTemperature()
   return logStatus("Barometer", "Temperature Check", false), false;
 }
 
+/*
+ * @brief Verifies the I2C connection of the Barometer sensor.
+ *
+ * This function checks if the Barometer is properly connected via I2C by verifying its address.
+ * Logs the result of the connection verification.
+ *
+ * @return Boolean value: true if the I2C connection is verified, false otherwise.
+ */
 bool BarometerVerifyConnection()
 {
   if (barometer.verifyConnection(BAROMETER_ADDRESS))
@@ -138,14 +225,18 @@ bool BarometerVerifyConnection()
   return logStatus("Barometer", "I2C Connection", false), false;
 }
 
-// Overall Initialization and Check
+/*
+ * @brief Initializes and checks all sensors.
+ *
+ * This function powers up and verifies the temperature and I2C connections for all critical
+ * and non-critical sensors. It logs the status of each sensor and determines if all critical
+ * sensors are operational.
+ *
+ * @return Boolean value: true if all critical sensors are successfully initialized and verified,
+ *         false if any critical sensor fails.
+ */
 bool InitializeAndCheckSensors()
 {
-  // bool magnetometer = PowerMagnetometer() && MagnetometerVerifyTemperature() && MagnetometerVerifyConnection();
-  // bool imu = PowerMainIMU() && MainIMUVerifyTemperature() && MainIMUVerifyConnection();
-  // bool barometer = PowerBarometer() && BarometerVerifyTemperature() && BarometerVerifyConnection();
-
-  // return magnetometer && imu && barometer;
 
   criticalSensors[MAIN_IMU] = PowerMainIMU() && MainIMUVerifyTemperature() && MainIMUVerifyConnection();
   criticalSensors[BAROMETER] = PowerBarometer() && BarometerVerifyTemperature() && BarometerVerifyConnection();
