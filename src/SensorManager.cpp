@@ -187,6 +187,7 @@ bool PowerBarometer()
     barometer.setPressureOversampling(BMP3_OVERSAMPLING_4X);
     barometer.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
     barometer.setOutputDataRate(BMP3_ODR_50_HZ);
+    initialAltitude = barometer.readAltitude(1013.25); // using initialAltitude from .h file to set the sea-level altitude as baseline
     logStatus("Barometer", "Power Up", true);
     return true;
   }
@@ -265,4 +266,19 @@ bool InitializeAndCheckSensors()
   }
 
   return true; // All critical sensors are operational
+}
+
+/*
+ * @brief Checks if rocket is in BOOST phase.
+ *
+ * Ensures that either acceleration or altitude is increasing to verify successful rocket launch
+ *
+ * @return Boolean value: true if data is successfully verified transitions to BOOST phase, false if conditions arent met.
+ *
+ */
+bool CheckLiftoffConditions()
+{
+  float currentAltitude = barometer.readAltitude(1013.25) - initialAltitude;
+
+  // return (currentAccel > 0 || currentAltitude > 0);
 }
