@@ -127,6 +127,7 @@ bool PowerMainIMU()
 
   if (mainIMU.begin() == ASM330LHH_OK)
   {
+    // TODO (#1) add logic to set accelerometer baseline
     mainIMU.Enable_X();
     mainIMU.Enable_G();
     logStatus("Main IMU", "Power Up", true);
@@ -280,5 +281,6 @@ bool CheckLiftoffConditions()
 {
   float currentAltitude = barometer.readAltitude(1013.25) - initialAltitude;
 
+  // TODO (#2) Create currentAccel local variable and algorithm to implement in the return statement 
   // return (currentAccel > 0 || currentAltitude > 0);
 }
