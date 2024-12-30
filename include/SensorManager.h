@@ -6,6 +6,10 @@
 #define MAIN_IMU_ADDRESS 0x6A
 #define BAROMETER_ADDRESS 0x76
 
+// Initial readings for reference
+float initialAltitude = 0;
+float initialAccel = 0;
+
 /**
  * @enum RocketState
  * @brief Represents the various states of the rocket during its flight.
