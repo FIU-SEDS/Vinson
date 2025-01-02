@@ -13,6 +13,17 @@ SFE_MMC5983MA magnetometer;
 ASM330LHHSensor mainIMU(&Wire, ASM330LHH_I2C_ADD_L);
 Adafruit_BMP3XX barometer;
 
+// Initial readings for reference
+float initialAltitude = 0;
+float initialAcceleration = 0;
+float initialMagnitude = 0;
+float lastAltitude = 0;
+float lastAccel = 0;
+int32_t mainIMUInitAccelAxes[3] = {};
+// Goes from x, y, z for initital acceleration
+int32_t mainIMUCurrAccelAxes[3] = {};
+// Goes from x, y, z for current acceleration
+
 /*
  * @brief Prints out a log message for the state of a given parameter.
  *
@@ -127,9 +138,10 @@ bool PowerMainIMU()
 
   if (mainIMU.begin() == ASM330LHH_OK)
   {
-    // TODO (#1) add logic to set accelerometer baseline
     mainIMU.Enable_X();
     mainIMU.Enable_G();
+    mainIMU.Get_X_Axes(mainIMUInitAccelAxes);
+    initialMagnitude = sqrt(pow(mainIMUInitAccelAxes[0], 2) + pow(mainIMUInitAccelAxes[1], 2) + pow(mainIMUInitAccelAxes[2], 2));
     logStatus("Main IMU", "Power Up", true);
     return true;
   }
@@ -280,7 +292,37 @@ bool InitializeAndCheckSensors()
 bool CheckLiftoffConditions()
 {
   float currentAltitude = barometer.readAltitude(1013.25) - initialAltitude;
+  mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
+  float currentMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) + pow(mainIMUCurrAccelAxes[1], 2) + pow(mainIMUCurrAccelAxes[2], 2));
 
-  // TODO (#2) Create currentAccel local variable and algorithm to implement in the return statement 
-  // return (currentAccel > 0 || currentAltitude > 0);
+  return ((currentMagnitude - initialMagnitude) > 0 || currentAltitude > 0);
+}
+
+/*
+ * @brief Checks if rocket is in APOGEE phase.
+ *
+ * Ensures that either acceleration or altitude is decreasing to verify maximum altitude
+ *
+ * @return Boolean value: true if data is successfully verified transitions to APOGEE phase, false if conditions arent met.
+ *
+ */
+bool CheckApogeeConditions()
+{
+
+  float currentAltitude = barometer.readAltitude(1013.25) - initialAltitude;
+
+  mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
+  float currentMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) +
+                                pow(mainIMUCurrAccelAxes[1], 2) +
+                                pow(mainIMUCurrAccelAxes[2], 2));
+
+  // 0.5m minimum altitude threshold hardcoded to detect descent
+  bool isDescending = (currentAltitude < lastAltitude - 0.5);
+  // 0.2 minimum deceleration threshold hardcoded to detect descent
+  bool isDecelerating = (currentMagnitude - initialMagnitude) < -0.2;
+
+  lastAltitude = currentAltitude;
+  lastAccel = currentMagnitude;
+
+  return (isDescending && isDecelerating);
 }
