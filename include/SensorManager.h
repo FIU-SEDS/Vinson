@@ -6,10 +6,6 @@
 #define MAIN_IMU_ADDRESS 0x6A
 #define BAROMETER_ADDRESS 0x76
 
-// Initial readings for reference
-float initialAltitude = 0;
-float initialAccel = 0;
-
 /**
  * @enum RocketState
  * @brief Represents the various states of the rocket during its flight.
@@ -63,6 +59,12 @@ bool InitializeAndCheckSensors();
 
 // Checks the I2C connection for a device based on its address.
 bool isDeviceConnected(uint8_t address);
+
+// Determines if rocket is in BOOST phase as it ensures that either acceleration or altitude is increasing 
+bool CheckLiftoffConditions();
+
+// Determines if the rocket reached APOGEE phase
+bool CheckApogeeConditions();
 
 /////////////////////////////////////////// MMC5983 Magnetometer ///////////////////////////////////////////
 
