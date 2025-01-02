@@ -27,7 +27,7 @@ void loop()
   switch (currentState)
   {
   case IDLE:
-    // if (CheckLiftoffConditions())
+    if (CheckLiftoffConditions())
     {
       currentState = BOOST;
       Serial.println("[STATE] Transitioning to BOOST phase.");
@@ -35,7 +35,11 @@ void loop()
     break;
 
   case BOOST:
-
+    if (CheckApogeeConditions())
+    {
+      currentState = APOGEE;
+      Serial.println("[STATE] Transitioning to APOGEE phase.");
+    }
     break;
 
   default:
