@@ -6,6 +6,11 @@
 #define MAIN_IMU_ADDRESS 0x6A
 #define BAROMETER_ADDRESS 0x76
 
+#define SEA_LEVEL_PRESSURE 1013.25      // provide sea-level pressure (in hPa)
+#define MAIN_DEPLOYMENT_ALTITUDE 1000.0 // Main parachute Deployment altitude in feet  
+#define LANDING_ALTITUDE 50             // Ground level altitude in feet (can adjust for launch site)
+#define ACCELERATION_THRESHOLD 10       // Acceleration threshold for "still" in m/s² (near zero)
+
 /**
  * @enum RocketState
  * @brief Represents the various states of the rocket during its flight.
@@ -60,11 +65,32 @@ bool InitializeAndCheckSensors();
 // Checks the I2C connection for a device based on its address.
 bool isDeviceConnected(uint8_t address);
 
-// Determines if rocket is in BOOST phase as it ensures that either acceleration or altitude is increasing 
+// Begins data transmission of all the sensors and store it inside the SD Card
+void StartData();
+
+// Determines if rocket is in BOOST phase as it ensures that either acceleration or altitude is increasing
 bool CheckLiftoffConditions();
 
 // Determines if the rocket reached APOGEE phase
 bool CheckApogeeConditions();
+
+// Determines if the rocket has reached altitude to deploy drogue parachutes
+bool CheckDrogueDeployment();
+
+// Deploys drogue parachute five seconds after Apogee is detected
+void DeployDrogueParachute();
+
+// Determines if the rocket has reached certain altitude to deploy main parachutes
+bool CheckMainDeploymentConditions();
+
+// Deploys main parachute after verification that certain altitude is reached
+void DeployMainParachute();
+
+// Determines if the rocket has landed
+bool CheckLandingConditions();
+
+// If rocket has landed then stops saving data to SD card and shuts down
+void DumpData();
 
 /////////////////////////////////////////// MMC5983 Magnetometer ///////////////////////////////////////////
 
