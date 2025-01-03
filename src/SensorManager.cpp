@@ -13,16 +13,22 @@ SFE_MMC5983MA magnetometer;
 ASM330LHHSensor mainIMU(&Wire, ASM330LHH_I2C_ADD_L);
 Adafruit_BMP3XX barometer;
 
-// Initial readings for reference
-float initialAltitude = 0;
-float initialAcceleration = 0;
-float initialMagnitude = 0;
-float lastAltitude = 0;
-float lastAccel = 0;
-int32_t mainIMUInitAccelAxes[3] = {};
-// Goes from x, y, z for initital acceleration
-int32_t mainIMUCurrAccelAxes[3] = {};
-// Goes from x, y, z for current acceleration
+// Arrays to hold accelerometer readings
+int32_t mainIMUInitAccelAxes[3] = {}; // For initial acceleration (x, y, z)
+int32_t mainIMUCurrAccelAxes[3] = {}; // For current acceleration (x, y, z)
+
+// Variables that will change over time
+float initialAltitude = 0.0;     // Initial altitude reference
+float initialAcceleration = 0.0; // Initial acceleration reference
+float initialMagnitude = 0.0;    // Initial acceleration magnitude
+float lastAltitude = 0.0;        // Last known altitude
+float lastAccel = 0.0;           // Last known acceleration
+
+// Flags and time tracking variables
+// For DeployDrogueParachute()
+bool deployStarted = false;        // Flag to indicate deployment started
+unsigned long deployStartTime = 0; // Time tracking for deployment
+
 
 /*
  * @brief Prints out a log message for the state of a given parameter.
@@ -200,7 +206,7 @@ bool PowerBarometer()
     barometer.setPressureOversampling(BMP3_OVERSAMPLING_4X);
     barometer.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
     barometer.setOutputDataRate(BMP3_ODR_50_HZ);
-    initialAltitude = barometer.readAltitude(1013.25); // using initialAltitude from .h file to set the sea-level altitude as baseline
+    initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE); // using initialAltitude from .h file to set the sea-level altitude as baseline
     logStatus("Barometer", "Power Up", true);
     return true;
   }
@@ -291,7 +297,7 @@ bool InitializeAndCheckSensors()
  */
 bool CheckLiftoffConditions()
 {
-  float currentAltitude = barometer.readAltitude(1013.25) - initialAltitude;
+  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) - initialAltitude;
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
   float currentMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) + pow(mainIMUCurrAccelAxes[1], 2) + pow(mainIMUCurrAccelAxes[2], 2));
 
@@ -309,7 +315,7 @@ bool CheckLiftoffConditions()
 bool CheckApogeeConditions()
 {
 
-  float currentAltitude = barometer.readAltitude(1013.25) - initialAltitude;
+  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) - initialAltitude;
 
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
   float currentMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) +
@@ -325,4 +331,138 @@ bool CheckApogeeConditions()
   lastAccel = currentMagnitude;
 
   return (isDescending && isDecelerating);
+}
+
+// NOTE: The static keyword in these functions is used to declare variables whose values persist across multiple calls to the function, rather than being reinitialized each time the function is invoked. (so every time the function is called it is not reset to 0 rather it keeps its value)
+
+/**
+ * @brief Checks if five seconds have passed since apogee to deploy drogue parachutes.
+ *
+ * @return Boolean value: true if five seconds passed and deployment signal sent,
+ * false if conditions aren't met.
+ */
+bool CheckDrogueDeployment()
+{
+  static unsigned long apogeeTime = 0;
+
+  if (apogeeTime == 0)
+  {
+    apogeeTime = millis(); // Record the time at apogee if not already set
+  }
+
+  if (millis() - apogeeTime >= 5000) // Check if 5 seconds have passed
+  {
+    return logStatus("Drogue Parachute", "Deployment Conditions", true), true;
+  }
+
+  return logStatus("Drogue Parachute", "Deployment Conditions", false), false;
+}
+
+/**
+ * @brief Deploys the drogue parachute by sending a signal to the deployment mechanism.
+ *
+ * @details This function triggers the drogue deployment mechanism, ensuring the
+ * signal is sent only once. Includes logging for debugging purposes.
+ */
+void DeployDrogueParachute()
+{
+  static bool drogueDeployed = false;
+
+  if (!drogueDeployed)
+  {
+    // UNCOMMENT WHEN DETERMINED PINS LOCATION
+
+    // digitalWrite(DROGUE_DEPLOY_PIN, HIGH); // Activiates pyro mechanism for drogue parachute
+    delay(100); // Short delay to ensure the signal is registered
+    // digitalWrite(DROGUE_DEPLOY_PIN, LOW);
+
+    logStatus("Drogue Parachute", "Signal Sent DEPLOYING", true);
+    drogueDeployed = true;
+  }
+  else
+  {
+    logStatus("Drogue Parachute", "Already Deployed", true);
+  }
+}
+
+/**
+ * @brief Checks if the rocket's altitude is at or below the main deployment altitude.
+ *
+ * @return Boolean value: true if the altitude is at or below the main deployment threshold, false otherwise.
+ */
+bool CheckMainDeploymentConditions()
+{
+  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084; // Converted to feet
+
+  // Check if the rocket has descended to or below the main deployment altitude
+  if (currentAltitude <= MAIN_DEPLOYMENT_ALTITUDE)
+  {
+    return logStatus("Main Parachute", "Deployment Conditions", true), true;
+  }
+
+  return logStatus("Main Parachute", "Deployment Conditions", false), false;
+}
+
+/**
+ * @brief Deploys the main parachute by sending a signal to the deployment mechanism.
+ *
+ * @details Sends a single signal to deploy the main parachute. Uses minimal memory
+ * and ensures the signal is sent only once by relying on external state management.
+ */
+void DeployMainParachute()
+{
+  static bool mainDeployed = false;
+
+  if (!mainDeployed)
+  {
+    // UNCOMMENT WHEN DETERMINED PINS LOCATION
+
+    // digitalWrite(MAIN_DEPLOY_PIN, HIGH); // Activiates pyro mechanism for drogue parachute
+    delay(100); // Short delay to ensure the signal is registered
+    // digitalWrite(MAIN_DEPLOY_PIN, LOW);
+
+    logStatus("Main Parachute", "Signal Sent DEPLOYING", true);
+    mainDeployed = true;
+  }
+  else
+  {
+    logStatus("Main Parachute", "Already Deployed", true);
+  }
+}
+
+/**
+ * @brief Checks if the rocket has landed based on acceleration and altitude.
+ *
+ * @return Boolean value: true if the rocket is considered landed, false otherwise.
+ */
+bool CheckLandingConditions()
+{
+
+  // Read current altitude from the barometer (convert to feet or meters as needed)
+  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084; // Convert to feet if needed
+
+  // Read current accelerometer data
+  mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
+
+  // Calculate the magnitude of the current acceleration (use existing variables directly)
+  float accelerationMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) + pow(mainIMUCurrAccelAxes[1], 2) + pow(mainIMUCurrAccelAxes[2], 2));
+
+  // Log the current values for debugging (if necessary)
+  logStatus("Landing Check", "Current Altitude", currentAltitude);
+  logStatus("Landing Check", "Acceleration Magnitude", accelerationMagnitude);
+
+  // Check if the altitude is close to ground level (within a small tolerance)
+  bool altitudeAtGround = (currentAltitude <= LANDING_ALTITUDE);
+
+  // Check if the acceleration magnitude is near zero (indicating no significant movement)
+  bool isStationary = (accelerationMagnitude <= ACCELERATION_THRESHOLD);
+
+  // If both conditions are met, the rocket is considered landed
+  if (altitudeAtGround && isStationary)
+  {
+
+    return logStatus("Landing Check", "Landing Detected", true), true;
+  }
+
+  return logStatus("Landing Check", "Not Landed", false), false;
 }
