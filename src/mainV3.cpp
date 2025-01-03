@@ -24,6 +24,7 @@ void setup()
 
 void loop()
 {
+  // TODO Figure out where to implement StartData() to begin data transmission
   switch (currentState)
   {
   case IDLE:
@@ -42,7 +43,35 @@ void loop()
     }
     break;
 
-  default:
+  case APOGEE:
+    if (CheckDrogueDeployment())
+    {
+      currentState = DROGUE_DEPLOY;
+    }
+    break;
+
+  case DROGUE_DEPLOY:
+    DeployDrogueParachute();
+
+    if (CheckMainDeploymentConditions()) // Check conditions for main parachute deployment
+    {
+      currentState = MAIN_DEPLOY;
+    }
+    break;
+
+  case MAIN_DEPLOY:
+    DeployMainParachute();
+
+    if (CheckLandingConditions())
+    {
+      currentState = LANDED;
+    }
+    break;
+
+  case LANDED:
+    void DumpData(); // TODO Uses SD card so make it work
+
+    // implement variable or function that stops the continuing writing of data
     break;
   }
 }
