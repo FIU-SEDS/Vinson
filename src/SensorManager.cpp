@@ -29,7 +29,6 @@ float lastAccel = 0.0;           // Last known acceleration
 bool deployStarted = false;        // Flag to indicate deployment started
 unsigned long deployStartTime = 0; // Time tracking for deployment
 
-
 /*
  * @brief Prints out a log message for the state of a given parameter.
  *
@@ -206,7 +205,7 @@ bool PowerBarometer()
     barometer.setPressureOversampling(BMP3_OVERSAMPLING_4X);
     barometer.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
     barometer.setOutputDataRate(BMP3_ODR_50_HZ);
-    initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE); // using initialAltitude from .h file to set the sea-level altitude as baseline
+    initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084; // using initialAltitude from .h file to set the sea-level altitude in FEET as baseline
     logStatus("Barometer", "Power Up", true);
     return true;
   }
@@ -297,7 +296,8 @@ bool InitializeAndCheckSensors()
  */
 bool CheckLiftoffConditions()
 {
-  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) - initialAltitude;
+  float currentAltitude = (barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084) - initialAltitude;
+
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
   float currentMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) + pow(mainIMUCurrAccelAxes[1], 2) + pow(mainIMUCurrAccelAxes[2], 2));
 
@@ -315,7 +315,7 @@ bool CheckLiftoffConditions()
 bool CheckApogeeConditions()
 {
 
-  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) - initialAltitude;
+  float currentAltitude = (barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084) - initialAltitude;
 
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
   float currentMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) +
