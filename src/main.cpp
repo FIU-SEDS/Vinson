@@ -1,36 +1,31 @@
-#include <SPI.h>
-#include <SD.h>
-#include <Adafruit_I2CDevice.h>
-
-const int chipSelect = 10; // Pin for CS (Chip Select)
+#include <StoreData.h>
 
 void setup()
 {
-  // Start the serial communication
-  Serial.begin(115200);
+  SPI.begin();
 
-  // Initialize SPI and SD card
-  if (!SD.begin(chipSelect))
+  // Initialize SD card
+  if (!SD.begin(CS))
   {
-    Serial.println("Initialization failed!");
-    return;
+    Serial.println("SD Card initialization failed!");
+    return; // Exit if SD card initialization fails
   }
-  Serial.println("SD card initialized.");
+
+  // Open the file on the SD card for writing in append mode
+  myFile = SD.open("payload.txt", FILE_WRITE);
+
+  // Check if the file opened successfully
+  if (myFile)
+  {
+    Serial.println("File opened successfully for writing.");
+    Serial.println("Writing to Payload.txt...");
+  }
+  else
+  {
+    Serial.println("Error opening the file.");
+  }
 }
 
 void loop()
 {
-  // Example: Write to a file
-  File dataFile = SD.open("test.txt", FILE_WRITE);
-  if (dataFile)
-  {
-    dataFile.println("Hello, SD card!");
-    dataFile.close();
-    Serial.println("Data written to SD card.");
-  }
-  else
-  {
-    Serial.println("Error opening file.");
-  }
-  delay(1000);
 }
