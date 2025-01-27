@@ -27,6 +27,10 @@ void loop()
   // TODO Figure out where to implement StartData() to begin data transmission
   switch (currentState)
   {
+  case INIT_AND_SYSTEMS_CHECK:
+    // this is just a GHOST case to avoid any compiler warnings but this section of the code should typically be skipped as it is handled in the setup() function
+    break;
+
   case IDLE:
     if (CheckLiftoffConditions())
     {
