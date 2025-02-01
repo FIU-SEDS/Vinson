@@ -2,18 +2,18 @@
 #include <Adafruit_I2CDevice.h>
 #include <SPI.h>
 
-void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
+#define LED_PIN 11
+
+void setup()
+{
+  pinMode(LED_PIN, OUTPUT);
 }
 
-void loop() {
-  // turn the LED on (HIGH is the voltage level)
-  digitalWrite(LED_BUILTIN, HIGH);
-  // wait for a second
-  delay(50);
-  // turn the LED off by making the voltage LOW
-  digitalWrite(LED_BUILTIN, LOW);
-  // wait for a second
-  delay(50);
+void loop()
+
+{
+  digitalWrite(LED_PIN, HIGH);
+  delay(1000);
+  digitalWrite(LED_PIN, LOW);
+  delay(1000);
 }
