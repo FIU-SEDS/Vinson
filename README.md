@@ -46,6 +46,7 @@ _The SparkFun Humidity sensor library can be used if the Adafruit one proves too
 - ASM330: `0x6A`
 - Magnetometer: `0x30`
 - BMP390: `0x76`
+- HTU21D: `0x40`
 
 ---
 
