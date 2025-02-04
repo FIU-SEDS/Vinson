@@ -12,10 +12,21 @@ SoftwareSerial loraSerial(RX_PIN, TX_PIN);
 
 void setup()
 {
-  Serial.begin(115200);     // Serial Monitor
-  loraSerial.begin(115200); // LoRa module baud rate
+  Serial.begin(9600);     // Serial Monitor
+  loraSerial.begin(9600); // LoRa module baud rate
 
+  loraSerial.println("AT+MODE=0"); // Sets radio to transciever mode
   delay(1000);
+
+  loraSerial.println("AT+ADDRESS=2"); // Sets radio address to 1
+  delay(1000);
+
+  loraSerial.println("AT+BAND=915000000"); // sets bandwith to 915 Mhz
+  delay(1000);
+
+  loraSerial.println("AT+IPR=9600"); // Sets baud rate at 9600
+  delay(1000);                       // Allow module to initialize
+
   Serial.println("LoRa Receiver Ready!");
 }
 
