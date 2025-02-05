@@ -9,7 +9,7 @@
 #include <Adafruit_I2CDevice.h>
 
 /** Default I2C address for the HTU21D. */
-#define HTU21DF_I2CADDR (0x40)
+#define HTU21DF_I2CADDRESS (0x40)
 
 /** Read temperature register. */
 #define HTU21DF_READTEMP (0xE3)
@@ -29,13 +29,15 @@
 /**
  * Driver for the Adafruit HTU21DF breakout board.
  */
-class Adafruit_HTU21DF {
+class Adafruit_HTU21DF
+{
 public:
   Adafruit_HTU21DF();
 
   bool begin(TwoWire *theWire = &Wire);
   float readTemperature(void);
   float readHumidity(void);
+  bool verifyConnection(uint8_t HTU_ADDRESS);
   void reset(void);
 
 private:

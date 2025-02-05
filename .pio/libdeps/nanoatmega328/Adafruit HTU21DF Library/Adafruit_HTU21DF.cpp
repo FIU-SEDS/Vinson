@@ -30,7 +30,8 @@
 /**
  * Constructor for the HTU21DF driver.
  */
-Adafruit_HTU21DF::Adafruit_HTU21DF() {
+Adafruit_HTU21DF::Adafruit_HTU21DF()
+{
   /* Assign default values to internal tracking variables. */
   _last_humidity = 0.0f;
   _last_temp = 0.0f;
@@ -42,13 +43,16 @@ Adafruit_HTU21DF::Adafruit_HTU21DF() {
  * @return true (1) if the device was successfully initialised, otherwise
  *         false (0).
  */
-bool Adafruit_HTU21DF::begin(TwoWire *theWire) {
-  if (i2c_dev) {
+bool Adafruit_HTU21DF::begin(TwoWire *theWire)
+{
+  if (i2c_dev)
+  {
     delete i2c_dev;
   }
-  i2c_dev = new Adafruit_I2CDevice(HTU21DF_I2CADDR, theWire);
+  i2c_dev = new Adafruit_I2CDevice(HTU21DF_I2CADDRESS, theWire);
 
-  if (!i2c_dev->begin()) {
+  if (!i2c_dev->begin())
+  {
     return false;
   }
 
@@ -63,7 +67,8 @@ bool Adafruit_HTU21DF::begin(TwoWire *theWire) {
 /**
  * Sends a 'reset' request to the HTU21DF, followed by a 15ms delay.
  */
-void Adafruit_HTU21DF::reset(void) {
+void Adafruit_HTU21DF::reset(void)
+{
   uint8_t cmd = HTU21DF_RESET;
   i2c_dev->write(&cmd, 1);
 
@@ -76,17 +81,20 @@ void Adafruit_HTU21DF::reset(void) {
  * @return a single-precision (32-bit) float value indicating the measured
  *         temperature in degrees Celsius or NAN on failure.
  */
-float Adafruit_HTU21DF::readTemperature(void) {
+float Adafruit_HTU21DF::readTemperature(void)
+{
   // OK lets ready!
   uint8_t cmd = HTU21DF_READTEMP;
-  if (!i2c_dev->write(&cmd, 1)) {
+  if (!i2c_dev->write(&cmd, 1))
+  {
     return NAN;
   }
 
   delay(50); // add delay between request and actual read!
 
   uint8_t buf[3];
-  if (!i2c_dev->read(buf, 3)) {
+  if (!i2c_dev->read(buf, 3))
+  {
     return NAN;
   }
 
@@ -114,10 +122,12 @@ float Adafruit_HTU21DF::readTemperature(void) {
  * @return A single-precision (32-bit) float value indicating the relative
  *         humidity in percent (0..100.0%).
  */
-float Adafruit_HTU21DF::readHumidity(void) {
+float Adafruit_HTU21DF::readHumidity(void)
+{
   /* Prepare the I2C request. */
   uint8_t cmd = HTU21DF_READHUM;
-  if (!i2c_dev->write(&cmd, 1)) {
+  if (!i2c_dev->write(&cmd, 1))
+  {
     return NAN;
   }
 
@@ -125,7 +135,8 @@ float Adafruit_HTU21DF::readHumidity(void) {
   delay(50);
 
   uint8_t buf[3];
-  if (!i2c_dev->read(buf, 3)) {
+  if (!i2c_dev->read(buf, 3))
+  {
     return NAN;
   }
 
@@ -145,4 +156,20 @@ float Adafruit_HTU21DF::readHumidity(void) {
   _last_humidity = hum;
 
   return hum;
+}
+
+bool Adafruit_HTU21DF::verifyConnection(uint8_t HTU_ADDRESS)
+{
+  Wire.beginTransmission(HTU_ADDRESS);
+
+  if (Wire.endTransmission() == 0)
+  {
+    // Connection is good; proceed with further operations if necessary
+    return true;
+  }
+  else
+  {
+    // Connection failed; handle the error (e.g., retry or enter a safe state)
+    return false;
+  }
 }

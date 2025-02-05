@@ -4,25 +4,29 @@
 #include <SparkFun_MMC5983MA_Arduino_Library.h> // Magnetometer Library
 #include <ASM330LHHSensor.h>                    // Main IMU Library
 #include <Adafruit_BMP3XX.h>                    // Barometer Library
+#include "Adafruit_HTU21DF.h"                   // HTU Library
 
 bool criticalSensors[2];
-bool nonCriticalSensors[1];
+bool nonCriticalSensors[2];
 
 // Sensor objects
 SFE_MMC5983MA magnetometer;
 ASM330LHHSensor mainIMU(&Wire, ASM330LHH_I2C_ADD_L);
 Adafruit_BMP3XX barometer;
+Adafruit_HTU21DF HTU = Adafruit_HTU21DF();
 
 // Arrays to hold accelerometer readings
 int32_t mainIMUInitAccelAxes[3] = {}; // For initial acceleration (x, y, z)
 int32_t mainIMUCurrAccelAxes[3] = {}; // For current acceleration (x, y, z)
 
 // Variables that will change over time
-float initialAltitude = 0.0;     // Initial altitude reference
-float initialAcceleration = 0.0; // Initial acceleration reference
-float initialMagnitude = 0.0;    // Initial acceleration magnitude
-float lastAltitude = 0.0;        // Last known altitude
-float lastAccel = 0.0;           // Last known acceleration
+float initialAltitude = 0.0;           // Initial altitude reference
+float initialAcceleration = 0.0;       // Initial acceleration reference
+float initialMagnitude = 0.0;          // Initial acceleration magnitude
+float initialAmbientTemperature = 0.0; // Initial ambient temperature on ground
+float initialRelativeHumidity = 0.0;   // Initial relative humidity on ground
+float lastAltitude = 0.0;              // Last known altitude
+float lastAccel = 0.0;                 // Last known acceleration
 
 // Flags and time tracking variables
 // For DeployDrogueParachute()
@@ -73,6 +77,8 @@ bool isDeviceConnected(uint8_t address)
   Wire.beginTransmission(address);
   return (Wire.endTransmission() == 0); // Returns true if device responds
 }
+
+// *******************************************  MAGNETOMETER INIT *******************************************
 
 /*
  * @brief Powers up the Magnetometer sensor.
@@ -127,6 +133,8 @@ bool MagnetometerVerifyConnection()
 
   return logStatus("Magnetometer", "I2C Connection", false), false;
 }
+
+// *******************************************  MAIN IMU INIT *******************************************
 
 /*
  * @brief Powers up the Main IMU sensor.
@@ -184,6 +192,8 @@ bool MainIMUVerifyConnection()
 
   return logStatus("Main IMU", "I2C Connection", false), false;
 }
+
+// *******************************************  BAROMETER INIT *******************************************
 
 /*
  * @brief Powers up the Barometer sensor.
@@ -244,6 +254,32 @@ bool BarometerVerifyConnection()
   return logStatus("Barometer", "I2C Connection", false), false;
 }
 
+bool PowerHTU()
+{
+  if (!isDeviceConnected(HTU21DF_I2CADDRESS))
+  {
+    return logStatus("HTU", "I2C Start Device Check (Power Up Function)", false), false;
+  }
+
+  if (HTU.begin())
+  {
+    initialAmbientTemperature = HTU.readTemperature(); // returned in celsius
+    initialRelativeHumidity = HTU.readHumidity();
+    logStatus("HTU", "Power Up", true);
+    return true;
+  }
+
+  return logStatus("HTU", "Power Up", false), false;
+}
+
+bool HTUVerifyConnection()
+{
+  if (!HTU.verifyConnection(HTU21DF_I2CADDRESS))
+    return logStatus("HTU", "I2C Connection", true), true;
+
+  return logStatus("HTU", "I2C Connection", false), false;
+}
+
 /*
  * @brief Initializes and checks all sensors.
  *
@@ -261,6 +297,7 @@ bool InitializeAndCheckSensors()
   criticalSensors[BAROMETER] = PowerBarometer() && BarometerVerifyTemperature() && BarometerVerifyConnection();
 
   nonCriticalSensors[MAGNETOMETER] = PowerMagnetometer() && MagnetometerVerifyTemperature() && MagnetometerVerifyConnection();
+  nonCriticalSensors[HTURHT] = PowerHTU() && HTUVerifyConnection();
 
   // Log the status of critical sensors
   Serial.println("[INFO] Critical Sensor Status:");
@@ -273,6 +310,8 @@ bool InitializeAndCheckSensors()
   Serial.println("[INFO] Non-Critical Sensor Status:");
   Serial.print("  Magnetometer: ");
   Serial.println(nonCriticalSensors[MAGNETOMETER] ? "SUCCESS" : "FAILURE");
+  Serial.print(" HTU: ");
+  Serial.println(nonCriticalSensors[HTURHT] ? "SUCCESS" : "FAILURE");
 
   // Check if all critical sensors passed
   for (int i = 0; i < 2; i++)
