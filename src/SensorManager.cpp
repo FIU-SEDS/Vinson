@@ -5,7 +5,7 @@
 #include <ASM330LHHSensor.h>                    // Main IMU Library
 #include <Adafruit_BMP3XX.h>                    // Barometer Library
 #include "Adafruit_HTU21DF.h"                   // HTU Library
-#include <SD.h>
+#include <SD.h>                                 // SD Card Library
 
 bool criticalSensors[2];
 bool nonCriticalSensors[2];
