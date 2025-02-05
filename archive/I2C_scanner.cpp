@@ -6,8 +6,8 @@
 
 void setup()
 {
-  Wire.begin();         // Join I2C bus
-  Serial.begin(115200); // Start serial communication
+  Wire.begin();       // Join I2C bus
+  Serial.begin(9600); // Start serial communication
   while (!Serial)
     ; // Wait for serial monitor
   Serial.println("\nI2C Scanner");
@@ -22,6 +22,7 @@ void loop()
 
   for (address = 1; address < 127; address++)
   {
+    Serial.println(address);
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
 
@@ -48,5 +49,5 @@ void loop()
   else
     Serial.println("Done\n");
 
-  delay(5000); // Wait 5 seconds for next scan
+  delay(2000); // 2 second delay
 }
