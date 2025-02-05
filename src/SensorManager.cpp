@@ -74,6 +74,8 @@ bool isDeviceConnected(uint8_t address)
   return (Wire.endTransmission() == 0); // Returns true if device responds
 }
 
+// *******************************************  MAGNETOMETER INIT ******************************************* 
+
 /*
  * @brief Powers up the Magnetometer sensor.
  *
@@ -127,6 +129,9 @@ bool MagnetometerVerifyConnection()
 
   return logStatus("Magnetometer", "I2C Connection", false), false;
 }
+
+// *******************************************  MAIN IMU INIT ******************************************* 
+
 
 /*
  * @brief Powers up the Main IMU sensor.
@@ -184,6 +189,8 @@ bool MainIMUVerifyConnection()
 
   return logStatus("Main IMU", "I2C Connection", false), false;
 }
+
+// *******************************************  BAROMETER INIT ******************************************* 
 
 /*
  * @brief Powers up the Barometer sensor.
