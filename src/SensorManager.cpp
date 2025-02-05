@@ -33,7 +33,7 @@ float lastAccel = 0.0;                 // Last known acceleration
 bool deployStarted = false;        // Flag to indicate deployment started
 unsigned long deployStartTime = 0; // Time tracking for deployment
 
-/*
+/**
  * @brief Prints out a log message for the state of a given parameter.
  *
  * This function logs the device's operation status, indicating whether it succeeded or failed.
@@ -63,7 +63,7 @@ void logStatus(const char *device, const char *operation, bool success)
   }
 }
 
-/*
+/**
  * @brief First check of the I2C connection for a device.
  *
  * This function uses the Wire library to initiate a transmission to the specified I2C address
@@ -80,7 +80,7 @@ bool isDeviceConnected(uint8_t address)
 
 // *******************************************  MAGNETOMETER INIT *******************************************
 
-/*
+/**
  * @brief Powers up the Magnetometer sensor.
  *
  * This function checks the I2C connection to the Magnetometer. If connected, it initializes the
@@ -102,7 +102,7 @@ bool PowerMagnetometer()
   return logStatus("Magnetometer", "Power Up", false), false;
 }
 
-/*
+/**
  * @brief Verifies the temperature of the Main IMU sensor.
  *
  * This function checks if the Main IMU's temperature is within the acceptable range.
@@ -118,7 +118,7 @@ bool MagnetometerVerifyTemperature()
   return logStatus("Magnetometer", "Temperature Check", false), false;
 }
 
-/*
+/**
  * @brief Verifies the I2C connection of the Magnetometer sensor.
  *
  * This function checks if the Magnetometer is properly connected via I2C by verifying its address.
@@ -136,7 +136,7 @@ bool MagnetometerVerifyConnection()
 
 // *******************************************  MAIN IMU INIT *******************************************
 
-/*
+/**
  * @brief Powers up the Main IMU sensor.
  *
  * This function checks the I2C connection to the Main IMU. If connected, it initializes the IMU,
@@ -161,7 +161,7 @@ bool PowerMainIMU()
   return logStatus("Main IMU", "Power Up", false), false;
 }
 
-/*
+/**
  * @brief Verifies the temperature of the Main IMU sensor.
  *
  * This function checks if the Main IMU's temperature is within the acceptable range.
@@ -177,7 +177,7 @@ bool MainIMUVerifyTemperature()
   return logStatus("Main IMU", "Temperature Check", false), false;
 }
 
-/*
+/**
  * @brief Verifies the I2C connection of the Main IMU sensor.
  *
  * This function checks if the Main IMU is properly connected via I2C by verifying its address.
@@ -195,7 +195,7 @@ bool MainIMUVerifyConnection()
 
 // *******************************************  BAROMETER INIT *******************************************
 
-/*
+/**
  * @brief Powers up the Barometer sensor.
  *
  * This function checks the I2C connection to the Barometer. If connected, it initializes the
@@ -222,7 +222,7 @@ bool PowerBarometer()
   return logStatus("Barometer", "Power Up", false), false;
 }
 
-/*
+/**
  * @brief Verifies the temperature of the Barometer sensor.
  *
  * This function checks if the Barometer's temperature is within the acceptable range.
@@ -238,7 +238,7 @@ bool BarometerVerifyTemperature()
   return logStatus("Barometer", "Temperature Check", false), false;
 }
 
-/*
+/**
  * @brief Verifies the I2C connection of the Barometer sensor.
  *
  * This function checks if the Barometer is properly connected via I2C by verifying its address.
@@ -253,6 +253,16 @@ bool BarometerVerifyConnection()
 
   return logStatus("Barometer", "I2C Connection", false), false;
 }
+
+/**
+ * @brief Powaers up the HTU20DF sensor.
+ *
+ * This function checks the I2C connection to the HTU20DF sensor. If connected, it initializes the
+ * sensor and reads the initial ambient temperature and relative humidity. The status of the
+ * power-up process is logged.
+ *
+ * @return Boolean value: true if the HTU20DF sensor is successfully powered up, false otherwise.
+ */
 
 bool PowerHTU()
 {
@@ -272,6 +282,15 @@ bool PowerHTU()
   return logStatus("HTU", "Power Up", false), false;
 }
 
+/**
+ * @brief Verifies the I2C connection to the HTU20DF sensor.
+ *
+ * This function checks whether the HTU20DF sensor is properly connected via I2C. If the connection
+ * is established, it logs a successful status; otherwise, it logs a failure.
+ *
+ * @return Boolean value: true if the HTU20DF sensor is connected, false otherwise.
+ */
+
 bool HTUVerifyConnection()
 {
   if (!HTU.verifyConnection(HTU21DF_I2CADDRESS))
@@ -280,7 +299,7 @@ bool HTUVerifyConnection()
   return logStatus("HTU", "I2C Connection", false), false;
 }
 
-/*
+/**
  * @brief Initializes and checks all sensors.
  *
  * This function powers up and verifies the temperature and I2C connections for all critical
@@ -325,7 +344,7 @@ bool InitializeAndCheckSensors()
   return true; // All critical sensors are operational
 }
 
-/*
+/**
  * @brief Checks if rocket is in BOOST phase.
  *
  * Ensures that either acceleration or altitude is increasing to verify successful rocket launch
@@ -343,7 +362,7 @@ bool CheckLiftoffConditions()
   return ((currentMagnitude - initialMagnitude) > 0 || currentAltitude > 0);
 }
 
-/*
+/**
  * @brief Checks if rocket is in APOGEE phase.
  *
  * Ensures that either acceleration or altitude is decreasing to verify maximum altitude
