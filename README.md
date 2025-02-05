@@ -2,7 +2,7 @@
 
 SEDS Avionics Team Flight Computer 2024-2025 Season
 
-Branch was **created** to implement the initial sensor functions of the HTU20DF sensor
+This repository is the Vinson main flight computer code for the Arduino Nano that will be guiding the rocket. The other repository linked below is the rover computer (ESP-32).
 
 - [Rover Computer Repo](https://github.com/erielC/av-rover-cmp/tree/main)
 
@@ -10,7 +10,30 @@ Branch was **created** to implement the initial sensor functions of the HTU20DF 
 
 ### Sensor Libraries Directory:
 
-#### HTU20DF Sensor 
+#### MMC5983 Magnetometer
+
+- [Magnetometer Library](https://github.com/sparkfun/SparkFun_MMC5983MA_Magnetometer_Arduino_Library/tree/main)
+- [Magnetometer Datasheet](https://www.memsic.com/Public/Uploads/uploadfile/files/20220119/MMC5983MADatasheetRevA.pdf)
+
+#### MB85RC FRAM
+
+- [FRAM Library](https://github.com/sosandroid/FRAM_MB85RC_I2C)
+
+#### BMP390 Barometer
+
+- [Barometer Library](https://github.com/adafruit/Adafruit_BMP3XX)
+- [BMP390 Datasheet #1 (Adafruit & Bosch)](https://cdn-learn.adafruit.com/assets/assets/000/096/781/original/bst-bmp390-fl000.pdf?1604526926)
+- [BMP390 Datasheet #2 (Bosch)](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp390-ds002.pdf)
+
+#### ASM330LHH Main IMU
+
+- [ASM330 Main IMU](https://github.com/stm32duino/ASM330LHH/tree/main)
+- [Main IMU (ASM330) Datasheet](https://www.st.com/resource/en/datasheet/asm330lhh.pdf)
+- [ASM330 Wiring Diagram](https://github.com/user-attachments/assets/08a4da38-90d2-46dd-91a4-b4015cfabe34)
+
+#### BMI323 Backup IMU
+
+- [BMI323 IMU Library](https://github.com/boschsensortec/BMI323_SensorAPI)
 - [HTU21D Humidity & Temperature Sensor](https://github.com/adafruit/Adafruit_HTU21DF_Library/tree/master)
 
 _The SparkFun Humidity sensor library can be used if the Adafruit one proves too tedious, so the link is provided here:  
@@ -23,7 +46,6 @@ _The SparkFun Humidity sensor library can be used if the Adafruit one proves too
 - ASM330: `0x6A`
 - Magnetometer: `0x30`
 - BMP390: `0x76`
-- HTU20D: `0x40`
 
 ---
 
