@@ -18,7 +18,7 @@
  * BSD license, all text here must be included in any redistribution.
  *
  */
-
+#pragma once
 #ifndef __BMP3XX_H__
 #define __BMP3XX_H__
 

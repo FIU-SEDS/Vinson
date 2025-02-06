@@ -38,7 +38,7 @@
 
 /*! @file bmp3_defs.h
  * @brief Sensor driver for BMP3 sensor */
-
+#pragma once
 #ifndef BMP3_DEFS_H_
 #define BMP3_DEFS_H_
 

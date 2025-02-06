@@ -66,9 +66,6 @@ bool InitializeAndCheckSensors();
 // Checks the I2C connection for a device based on its address.
 bool isDeviceConnected(uint8_t address);
 
-// Begins data transmission of all the sensors and store it inside the SD Card
-void StartData();
-
 // Determines if rocket is in BOOST phase as it ensures that either acceleration or altitude is increasing
 bool CheckLiftoffConditions();
 
@@ -90,29 +87,17 @@ void DeployMainParachute();
 // Determines if the rocket has landed
 bool CheckLandingConditions();
 
+// Begins data transmission of all the sensors and store it inside the SD Card
+void StartData();
+
 // If rocket has landed then stops saving data to SD card and shuts down
 void DumpData();
 
 // Powers up the Magnetometer sensor.
 bool PowerMagnetometer();
 
-// Verifies the temperature of the Magnetometer sensor.
-bool MagnetometerVerifyTemperature();
-
-// Powers up the Main IMU sensor.
-bool PowerMainIMU();
-
-// Verifies the temperature of the Main IMU sensor.
-bool MainIMUVerifyTemperature();
-
 // Powers up the Barometer sensor.
 bool PowerBarometer();
-
-// Verifies the temperature of the Barometer sensor.
-bool BarometerVerifyTemperature();
-
-// Verifies the I2C connection of the Barometer sensor.
-bool BarometerVerifyConnection();
 
 // Powers up the HTU sensor
 bool PowerHTU();
