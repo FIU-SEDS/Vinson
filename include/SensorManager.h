@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SENSOR_MANAGER_H
 #define SENSOR_MANAGER_H
 #include <Arduino.h>
@@ -59,8 +60,6 @@ enum NonCriticalIndex
   HTURHT // HTU Relative Humidity and Temperature sensor
 };
 
-/////////////////////////////////////////// Function prototypes ///////////////////////////////////////////
-
 // Initializes and verifies all critical and non-critical sensors.
 bool InitializeAndCheckSensors();
 
@@ -94,33 +93,17 @@ bool CheckLandingConditions();
 // If rocket has landed then stops saving data to SD card and shuts down
 void DumpData();
 
-/////////////////////////////////////////// MMC5983 Magnetometer ///////////////////////////////////////////
-
 // Powers up the Magnetometer sensor.
 bool PowerMagnetometer();
 
 // Verifies the temperature of the Magnetometer sensor.
 bool MagnetometerVerifyTemperature();
 
-// Verifies the I2C connection of the Magnetometer sensor.
-bool MagnetometerVerifyConnection();
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////// ASM330LHH Main IMU ///////////////////////////////////////////
-
 // Powers up the Main IMU sensor.
 bool PowerMainIMU();
 
 // Verifies the temperature of the Main IMU sensor.
 bool MainIMUVerifyTemperature();
-
-// Verifies the I2C connection of the Main IMU sensor.
-bool MainIMUVerifyConnection();
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////// BMP390 Barometer ///////////////////////////////////////////
 
 // Powers up the Barometer sensor.
 bool PowerBarometer();
@@ -131,14 +114,7 @@ bool BarometerVerifyTemperature();
 // Verifies the I2C connection of the Barometer sensor.
 bool BarometerVerifyConnection();
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////// HTU20DF Humidity & Temperature Sensor ///////////////////////////////////////////
-
 // Powers up the HTU sensor
 bool PowerHTU();
-
-// Verifies the I2C connection of the HTU sensor.
-bool HTUVerifyConnection();
 
 #endif

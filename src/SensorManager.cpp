@@ -5,7 +5,6 @@
 #include <ASM330LHHSensor.h>                    // Main IMU Library
 #include <Adafruit_BMP3XX.h>                    // Barometer Library
 #include "Adafruit_HTU21DF.h"                   // HTU Library
-#include <SdFat.h>                              // SD Card Library
 
 bool criticalSensors[2];
 bool nonCriticalSensors[2];
@@ -85,57 +84,32 @@ bool isDeviceConnected(uint8_t address)
  * @brief Powers up the Magnetometer sensor.
  *
  * This function checks the I2C connection to the Magnetometer. If connected, it initializes the
- * magnetometer and performs a soft reset. Logs the status of the power-up process.
+ * magnetometer, performs a soft reset, and verifies the temperature. Logs the status of the power-up process.
  *
  * @return Boolean value: true if the Magnetometer is successfully powered up, false otherwise.
  */
 bool PowerMagnetometer()
 {
   if (!isDeviceConnected(MAGNETOMETER_ADDRESS))
-    return logStatus("Magnetometer", "I2C Start Device Check (Power Up Function)", false), false;
+    logStatus("Magnetometer", "I2C Start Device Check (Power Up Function)", false);
+  return false;
 
-  if (magnetometer.begin())
+  if (!magnetometer.begin())
   {
-    magnetometer.softReset();
-    logStatus("Magnetometer", "Power Up", true);
-    return true;
+    logStatus("Magnetometer", "Power Up", false);
+    return false;
   }
-  return logStatus("Magnetometer", "Power Up", false), false;
+  magnetometer.softReset();
+
+  if (!magnetometer.verifyTemperature())
+  {
+    logStatus("Magnetometer", "Temperature Check", false);
+    return false;
+  }
+
+  logStatus("Magnetometer", "Power Up", true);
+  return true;
 }
-
-/**
- * @brief Verifies the temperature of the Main IMU sensor.
- *
- * This function checks if the Main IMU's temperature is within the acceptable range.
- * Logs the result of the temperature verification.
- *
- * @return Boolean value: true if the temperature check passes, false otherwise.
- */
-bool MagnetometerVerifyTemperature()
-{
-  if (magnetometer.verifyTemperature())
-    return logStatus("Magnetometer", "Temperature Check", true), true;
-
-  return logStatus("Magnetometer", "Temperature Check", false), false;
-}
-
-/**
- * @brief Verifies the I2C connection of the Magnetometer sensor.
- *
- * This function checks if the Magnetometer is properly connected via I2C by verifying its address.
- * Logs the result of the connection verification.
- *
- * @return Boolean value: true if the I2C connection is verified, false otherwise.
- */
-bool MagnetometerVerifyConnection()
-{
-  if (magnetometer.verifyConnection(MAGNETOMETER_ADDRESS))
-    return logStatus("Magnetometer", "I2C Connection", true), true;
-
-  return logStatus("Magnetometer", "I2C Connection", false), false;
-}
-
-// *******************************************  MAIN IMU INIT *******************************************
 
 /**
  * @brief Powers up the Main IMU sensor.
@@ -148,50 +122,30 @@ bool MagnetometerVerifyConnection()
 bool PowerMainIMU()
 {
   if (!isDeviceConnected(MAIN_IMU_ADDRESS))
-    return logStatus("Main IMU", "I2C Start Device Check (Power Up Function)", false), false;
-
-  if (mainIMU.begin() == ASM330LHH_OK)
   {
-    mainIMU.Enable_X();
-    mainIMU.Enable_G();
-    mainIMU.Get_X_Axes(mainIMUInitAccelAxes);
-    initialMagnitude = sqrt(pow(mainIMUInitAccelAxes[0], 2) + pow(mainIMUInitAccelAxes[1], 2) + pow(mainIMUInitAccelAxes[2], 2));
-    logStatus("Main IMU", "Power Up", true);
-    return true;
+    logStatus("Main IMU", "I2C Start Device Check (Power Up Function)", false);
+    return false;
   }
-  return logStatus("Main IMU", "Power Up", false), false;
-}
 
-/**
- * @brief Verifies the temperature of the Main IMU sensor.
- *
- * This function checks if the Main IMU's temperature is within the acceptable range.
- * Logs the result of the temperature verification.
- *
- * @return Boolean value: true if the temperature check passes, false otherwise.
- */
-bool MainIMUVerifyTemperature()
-{
-  if (mainIMU.verifyTemperature() == ASM330LHH_OK)
-    return logStatus("Main IMU", "Temperature Check", true), true;
+  if (mainIMU.begin() != ASM330LHH_OK)
+  {
+    logStatus("Main IMU", "Power Up", false);
+    return false;
+  }
 
-  return logStatus("Main IMU", "Temperature Check", false), false;
-}
+  mainIMU.Enable_X();
+  mainIMU.Enable_G();
+  mainIMU.Get_X_Axes(mainIMUInitAccelAxes);
+  initialMagnitude = sqrt(pow(mainIMUInitAccelAxes[0], 2) + pow(mainIMUInitAccelAxes[1], 2) + pow(mainIMUInitAccelAxes[2], 2));
 
-/**
- * @brief Verifies the I2C connection of the Main IMU sensor.
- *
- * This function checks if the Main IMU is properly connected via I2C by verifying its address.
- * Logs the result of the connection verification.
- *
- * @return Boolean value: true if the I2C connection is verified, false otherwise.
- */
-bool MainIMUVerifyConnection()
-{
-  if (mainIMU.verifyConnection(MAIN_IMU_ADDRESS) == ASM330LHH_OK)
-    return logStatus("Main IMU", "I2C Connection", true), true;
+  if (mainIMU.verifyTemperature() != ASM330LHH_OK)
+  {
+    logStatus("Main IMU", "Temperature Check", false);
+    return false;
+  }
 
-  return logStatus("Main IMU", "I2C Connection", false), false;
+  logStatus("Main IMU", "Power Up", true);
+  return true;
 }
 
 // *******************************************  BAROMETER INIT *******************************************
@@ -208,51 +162,31 @@ bool MainIMUVerifyConnection()
 bool PowerBarometer()
 {
   if (!isDeviceConnected(BAROMETER_ADDRESS))
-    return logStatus("Barometer", "I2C Start Device Check (Power Up Function)", false), false;
-
-  if (barometer.begin_I2C(BAROMETER_ADDRESS))
   {
-    barometer.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-    barometer.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-    barometer.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
-    barometer.setOutputDataRate(BMP3_ODR_50_HZ);
-    initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084; // using initialAltitude from .h file to set the sea-level altitude in FEET as baseline
-    logStatus("Barometer", "Power Up", true);
-    return true;
+    logStatus("Barometer", "I2C Start Device Check (Power Up Function)", false);
+    return false;
   }
-  return logStatus("Barometer", "Power Up", false), false;
-}
 
-/**
- * @brief Verifies the temperature of the Barometer sensor.
- *
- * This function checks if the Barometer's temperature is within the acceptable range.
- * Logs the result of the temperature verification.
- *
- * @return Boolean value: true if the temperature check passes, false otherwise.
- */
-bool BarometerVerifyTemperature()
-{
-  if (barometer.verifyTemperature())
-    return logStatus("Barometer", "Temperature Check", true), true;
+  if (!barometer.begin_I2C(BAROMETER_ADDRESS))
+  {
+    logStatus("Barometer", "Power Up", false);
+    return false;
+  }
 
-  return logStatus("Barometer", "Temperature Check", false), false;
-}
+  barometer.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+  barometer.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+  barometer.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+  barometer.setOutputDataRate(BMP3_ODR_50_HZ);
+  initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084; // using initialAltitude from .h file to set the sea-level altitude in FEET as baseline
 
-/**
- * @brief Verifies the I2C connection of the Barometer sensor.
- *
- * This function checks if the Barometer is properly connected via I2C by verifying its address.
- * Logs the result of the connection verification.
- *
- * @return Boolean value: true if the I2C connection is verified, false otherwise.
- */
-bool BarometerVerifyConnection()
-{
-  if (barometer.verifyConnection(BAROMETER_ADDRESS))
-    return logStatus("Barometer", "I2C Connection", true), true;
+  if (!barometer.verifyTemperature())
+  {
+    logStatus("Barometer", "Temperature Check", false);
+    return false;
+  }
 
-  return logStatus("Barometer", "I2C Connection", false), false;
+  logStatus("Barometer", "Power Up", true);
+  return true;
 }
 
 /**
@@ -269,35 +203,22 @@ bool PowerHTU()
 {
   if (!isDeviceConnected(HTU21DF_I2CADDRESS))
   {
-    return logStatus("HTU", "I2C Start Device Check (Power Up Function)", false), false;
+    logStatus("HTU", "I2C Start Device Check (Power Up Function)", false);
+    return false;
   }
 
-  if (HTU.begin())
+  if (!HTU.begin())
   {
-    initialAmbientTemperature = HTU.readTemperature(); // returned in celsius
-    initialRelativeHumidity = HTU.readHumidity();
-    logStatus("HTU", "Power Up", true);
-    return true;
+
+    logStatus("HTU", "Power Up", false);
+    return false;
   }
 
-  return logStatus("HTU", "Power Up", false), false;
-}
+  initialAmbientTemperature = HTU.readTemperature(); // returned in celsius
+  initialRelativeHumidity = HTU.readHumidity();
 
-/**
- * @brief Verifies the I2C connection to the HTU20DF sensor.
- *
- * This function checks whether the HTU20DF sensor is properly connected via I2C. If the connection
- * is established, it logs a successful status; otherwise, it logs a failure.
- *
- * @return Boolean value: true if the HTU20DF sensor is connected, false otherwise.
- */
-
-bool HTUVerifyConnection()
-{
-  if (!HTU.verifyConnection(HTU21DF_I2CADDRESS))
-    return logStatus("HTU", "I2C Connection", true), true;
-
-  return logStatus("HTU", "I2C Connection", false), false;
+  logStatus("HTU", "Power Up", true);
+  return true;
 }
 
 /**
@@ -313,11 +234,10 @@ bool HTUVerifyConnection()
 bool InitializeAndCheckSensors()
 {
 
-  criticalSensors[MAIN_IMU] = PowerMainIMU() && MainIMUVerifyTemperature() && MainIMUVerifyConnection();
-  criticalSensors[BAROMETER] = PowerBarometer() && BarometerVerifyTemperature() && BarometerVerifyConnection();
-
-  nonCriticalSensors[MAGNETOMETER] = PowerMagnetometer() && MagnetometerVerifyTemperature() && MagnetometerVerifyConnection();
-  nonCriticalSensors[HTURHT] = PowerHTU() && HTUVerifyConnection();
+  criticalSensors[MAIN_IMU] = PowerMainIMU();
+  criticalSensors[BAROMETER] = PowerBarometer();
+  nonCriticalSensors[MAGNETOMETER] = PowerMagnetometer();
+  nonCriticalSensors[HTURHT] = PowerHTU();
 
   // Log the status of critical sensors
   Serial.println("[INFO] Critical Sensor Status:");
@@ -411,10 +331,12 @@ bool CheckDrogueDeployment()
 
   if (millis() - apogeeTime >= 5000) // Check if 5 seconds have passed
   {
-    return logStatus("Drogue Parachute", "Deployment Conditions", true), true;
+    logStatus("Drogue Parachute", "Deployment Conditions", true);
+    return true;
   }
 
-  return logStatus("Drogue Parachute", "Deployment Conditions", false), false;
+  logStatus("Drogue Parachute", "Deployment Conditions", false);
+  return false;
 }
 
 /**
@@ -456,10 +378,12 @@ bool CheckMainDeploymentConditions()
   // Check if the rocket has descended to or below the main deployment altitude
   if (currentAltitude <= MAIN_DEPLOYMENT_ALTITUDE)
   {
-    return logStatus("Main Parachute", "Deployment Conditions", true), true;
+    logStatus("Main Parachute", "Deployment Conditions", true);
+    return true;
   }
 
-  return logStatus("Main Parachute", "Deployment Conditions", false), false;
+  logStatus("Main Parachute", "Deployment Conditions", false);
+  return false;
 }
 
 /**
@@ -520,8 +444,10 @@ bool CheckLandingConditions()
   if (altitudeAtGround && isStationary)
   {
 
-    return logStatus("Landing Check", "Landing Detected", true), true;
+    logStatus("Landing Check", "Landing Detected", true);
+    return true;
   }
 
-  return logStatus("Landing Check", "Not Landed", false), false;
+  logStatus("Landing Check", "Not Landed", false);
+  return false;
 }
