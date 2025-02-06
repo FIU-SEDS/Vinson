@@ -1,0 +1,99 @@
+
+SPI pins:
+MISO: 12
+MOSI: 11
+SCK:  13
+SS:   10
+
+Be sure to edit DISABLE_CHIP_SELECT if you have
+a second SPI device.  For example, with the Ethernet
+shield, DISABLE_CHIP_SELECT should be set to 10
+to disable the Ethernet controller.
+
+SD chip select is the key hardware option.
+Common values are:
+Arduino Ethernet shield, pin 4
+Sparkfun SD shield, pin 8
+Adafruit SD shields and modules, pin 10
+
+Enter the chip select pin number: 7
+
+Assuming the SD is the only SPI device.
+Edit DISABLE_CHIP_SELECT to disable another device.
+
+SD initialization failed.
+Do not reformat the card!
+Is the card correctly inserted?
+Is chipSelect set to the correct value?
+Does another SPI device need to be disabled?
+Is there a wiring/soldering problem?
+
+errorCode: 0x17, errorData: 0x1
+
+Restarting
+
+Enter the chip select pin number: 8
+
+Assuming the SD is the only SPI device.
+Edit DISABLE_CHIP_SELECT to disable another device.
+
+SD initialization failed.
+Do not reformat the card!
+Is the card correctly inserted?
+Is chipSelect set to the correct value?
+Does another SPI device need to be disabled?
+Is there a wiring/soldering problem?
+
+errorCode: 0x1, errorData: 0x0
+
+Restarting
+
+Enter the chip select pin number: 1
+
+Assuming the SD is the only SPI device.
+Edit DISABLE_CHIP_SELECT to disable another device.
+
+SD initialization failed.
+Do not reformat the card!
+Is the card correctly inserted?
+Is chipSelect set to the correct value?
+Does another SPI device need to be disabled?
+Is there a wiring/soldering problem?
+
+errorCode: 0x1, errorData: 0x0
+
+Restarting
+
+Enter the chip select pin number: 1
+
+Assuming the SD is the only SPI device.
+Edit DISABLE_CHIP_SELECT to disable another device.
+
+SD initialization failed.
+Do not reformat the card!
+Is the card correctly inserted?
+Is chipSelect set to the correct value?
+Does another SPI device need to be disabled?
+Is there a wiring/soldering problem?
+
+errorCode: 0x1, errorData: 0x0
+
+Restarting
+
+Enter the chip select pin number: 7
+
+Assuming the SD is the only SPI device.
+Edit DISABLE_CHIP_SELECT to disable another device.
+
+SD initialization failed.
+Do not reformat the card!
+Is the card correctly inserted?
+Is chipSelect set to the correct value?
+Does another SPI device need to be disabled?
+Is there a wiring/soldering problem?
+
+errorCode: 0x17, errorData: 0x1
+
+Restarting
+
+Enter the chip select pin number: 
