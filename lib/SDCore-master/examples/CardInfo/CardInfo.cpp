@@ -1,4 +1,5 @@
 // Libraries Includes
+#include <Arduino.h>
 #include <SDCore.h>
 
 /*
