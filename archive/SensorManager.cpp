@@ -6,14 +6,15 @@
 #include <Adafruit_BMP3XX.h>                    // Barometer Library
 #include "Adafruit_HTU21DF.h"                   // HTU Library
 
+
 bool criticalSensors[2];
 bool nonCriticalSensors[2];
 
-// Sensor objects
-SFE_MMC5983MA magnetometer;
+// Sensor objects983MA magnetometer;
 ASM330LHHSensor mainIMU(&Wire, ASM330LHH_I2C_ADD_L);
 Adafruit_BMP3XX barometer;
 Adafruit_HTU21DF HTU = Adafruit_HTU21DF();
+SFE_MMC5
 
 // Arrays to hold accelerometer readings
 int32_t mainIMUInitAccelAxes[3] = {}; // For initial acceleration (x, y, z)
