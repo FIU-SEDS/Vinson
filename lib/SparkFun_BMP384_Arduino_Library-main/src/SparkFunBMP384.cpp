@@ -49,24 +49,6 @@ int8_t BMP384::beginI2C(uint8_t address, TwoWire& wirePort)
     return begin();
 }
 
-int8_t BMP384::beginSPI(uint8_t csPin, uint32_t clockFrequency)
-{
-    // Set up chip select pin
-    interfaceData.spiCSPin = csPin;
-    digitalWrite(csPin, HIGH); // Write high now to ensure pin doesn't go low
-    pinMode(csPin, OUTPUT);
-
-    // Set desired clock frequency
-    interfaceData.spiClockFrequency = clockFrequency;
-
-    // Set interface
-    sensor.intf = BMP3_SPI_INTF;
-    interfaceData.interface = BMP3_SPI_INTF;
-
-    // Initialize sensor
-    return begin();
-}
-
 int8_t BMP384::init()
 {
     // Set helper function pointers
