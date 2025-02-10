@@ -1,4 +1,5 @@
 #include "BMP390.h"
+#include <Arduino.h>
 #include <Wire.h>
 
 BMP390::BMP390()
@@ -37,25 +38,8 @@ int32_t BMP390::read_pressure()
 
 int32_t BMP390::read_altitude(float seaLevel)
 {
-    // Read pressure (in hPa) as an integer
-    int32_t pressure = read_pressure();
-
-    // Convert sea level pressure to hPa (as integer), assuming seaLevel is in hPa
-    int32_t seaLevelPressure = static_cast<int32_t>(seaLevel * 100); // Convert seaLevel to hPa (e.g., 1013.25 hPa = 101325)
-
-    // Calculate the ratio (pressure/seaLevel) as integer
-    int32_t ratio = (pressure * 1000) / seaLevelPressure; // Multiply by 1000 for precision
-
-    // Approximate power of ratio^5 using integer math (no floating point)
-    ratio = ratio * ratio * ratio * ratio * ratio; // ratio^5
-
-    // Calculate altitude in meters using integer math (avoiding floating point)
-    int32_t altitudeInMeters = 44330 * (1000 - ratio) / 1000; // Integer-only calculation
-
-    // Convert altitude to feet (1 meter = 3.28084 feet) using integer math
-    int32_t altitudeInFeet = (altitudeInMeters * 328084) / 100000; // Integer division to avoid float
-
-    return altitudeInFeet; // Return altitude in feet
+    uint32_t atmospheric = read_pressure() / 100;
+    return 44330.0 * (1.0 - pow(atmospheric / seaLevel, 0.1903));
 }
 
 bool BMP390::set_temperature_oversampling(uint8_t os)
