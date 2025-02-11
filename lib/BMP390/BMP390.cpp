@@ -59,7 +59,7 @@ bool BMP390::set_IIR_filter_coeff(uint8_t fs)
 
 bool BMP390::set_output_data_rate(uint8_t odr)
 {
-    return write_register(BMP390_ODR, (odr & 0x1F)); // 5-bit ODR setting
+    return write_register(BMP390_ODR, (odr & 0x02)); // 5-bit ODR setting
 }
 
 // ========== Helper Functions for I2C Communication ==========
