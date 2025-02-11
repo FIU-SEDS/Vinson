@@ -8,7 +8,7 @@
 
 // arduino nano
 
-#define SEALEVELPRESSURE_HPA (1013.25)
+#define SEALEVELPRESSURE_HPA (1021)
 
 #define RX_PIN 5 // Connect to TX of RYLR998
 #define TX_PIN 6 // Connect to RX of RYLR998
@@ -42,9 +42,9 @@ void setup()
       ;
   }
 
-  bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-  bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-  bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+  bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_2X);
+  bmp.setPressureOversampling(BMP3_OVERSAMPLING_2X);
+  bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_DISABLE);
   bmp.setOutputDataRate(BMP3_ODR_50_HZ);
 }
 
@@ -52,7 +52,7 @@ void loop()
 {
   // loraSerial.println("AT+SEND=2,10,HELLOWORLD"); // Send data
   // delay(1000);
-  // Serial.println("SENT"); // Wait 2 seconds before sending again
+  // Serial.println("SENT"); // Wait 2 seconds before sending agains
 
   if (!bmp.performReading())
   {
@@ -61,10 +61,11 @@ void loop()
   }
 
   float altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
-  char buffer[10];                 // Buffer to store formatted float as string
-  dtostrf(altitude, 6, 2, buffer); // Convert float to string with 2 decimal places
-
-  loraSerial.println("AT+SEND=2,10," + String(buffer));
+  // String buffer = "ERIELCABRERA";
+  String buffer;
+  buffer = String(altitude);
+  String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
+  loraSerial.println(command);
 
   Serial.println("SENT");
   delay(2000);
