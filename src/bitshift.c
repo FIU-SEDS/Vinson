@@ -13,18 +13,20 @@ int main()
   value_binary(pwr);
   printf("PWR_CTRL Value in decimal: %d\n", pwr); // Decimal output
 
-    // OSR Register
-    uint8_t osr = 0b00000000;              // Start with all bits cleared
-    osr |= (0b010);                        // Set OSR_P (bits 2..0) to 010
-    osr |= (0b011 << 3);                   // Set OSR_T (bits 5..3) to 011
-    value_binary(osr);
-    printf("OSR Value in decimal: %d\n", osr); // Decimal output
+  // OSR Register
+  uint8_t osr = 0b00000000; // Start with all bits cleared
+  osr |= (0b011);           // Set OSR_P (bits 2..0) to 011
+  osr |= (0b001 << 3);      // Set OSR_T (bits 5..3) to 001
+  value_binary(osr);
+  printf("OSR Value in decimal: %d\n", osr); // Decimal output
 
-  // ODR Register
-  uint8_t odr = 0b00000000;
-  odr |= (0b001 << 1);
-  value_binary(odr);
-  printf("ODR Value in decimal: %d\n", odr); // Decimal output
+  // IIR Filter Coeff Register
+  uint8_t iir = 0b00000000;
+  iir |= (0b001 << 1);
+  value_binary(iir);
+  printf("ODR Value in decimal: %d\n", iir); // Decimal output
+
+  printf("\n\nSensor settings:\nPower Mode: Normal\nTemp_en: Enabled\nPress_en: enabled\nosr_p: x8\nosr_t: x2\nIIR filter: 1\nODR: 50Hz");
 
   return 0;
 }

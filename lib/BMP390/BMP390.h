@@ -29,8 +29,11 @@
 #define BMP390_PWR_CTRL 0x1B
 #define BMP390_OSR 0x1C
 #define BMP390_ODR 0x1D
-#define BMP390_CONFIG 0x1F
+#define BMP390_IIR_FILTER_CONFIG 0x1F
 #define BMP390_CMD 0x7E
+
+// Values
+#define SOFT_RESET_VALUE 0xB6
 class BMP390
 {
 
