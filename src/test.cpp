@@ -20,11 +20,11 @@ void setup()
   Serial.println("BMP390 initialized successfully!");
 
   // Turn on the BMP390
-  bmp.set_measurement_mode(0b00011011);
-  bmp.set_temperature_oversampling(2);
-  bmp.set_pressure_oversampling(2);
-  bmp.set_IIR_filter_coeff(0b00001010);
-  bmp.set_output_data_rate(0x02);
+  bmp.set_measurement_mode(PWR_NORMAL_TP_EN);
+  // OSR rate for pressure: 8X and for temperature: 2X
+  bmp.set_pressure_temperature_oversampling(OVERSAMPLING_P8X_T2X); 
+  bmp.set_IIR_filter_coeff(IIR_FILTER_COEFF_1);
+  bmp.set_output_data_rate(ODR_RATE_50HZ);
 }
 
 void loop()

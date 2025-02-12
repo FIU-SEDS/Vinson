@@ -40,24 +40,22 @@ int32_t BMP390::read_altitude(float seaLevel)
     return 44330.0 * (1.0 - pow(atmospheric / seaLevel, 0.1903));
 }
 
-bool BMP390::set_measurement_mode(uint8_t mode)
+bool BMP390::set_measurement_mode(uint8_t mode_mask)
 {
+    uint8_t mode = BMP390_BASE_VALUE | mode_mask;
     return write_register(BMP390_PWR_CTRL, mode);
 }
 
-bool BMP390::set_temperature_oversampling(uint8_t os)
+bool BMP390::set_pressure_temperature_oversampling(uint8_t osr_mask)
 {
-    return write_register(BMP390_OSR, (os & 0x07)); // 3-bit oversampling setting
+    uint8_t osr = BMP390_BASE_VALUE | osr_mask;
+    return write_register(BMP390_OSR, osr); // 3-bit oversampling setting
 }
 
-bool BMP390::set_pressure_oversampling(uint8_t os)
+bool BMP390::set_IIR_filter_coeff(uint8_t iir_mask)
 {
-    return write_register(BMP390_OSR, (os & 0x07) << 3); // Shift bits for pressure OSR
-}
-
-bool BMP390::set_IIR_filter_coeff(uint8_t fs)
-{
-    return write_register(BMP390_CONFIG, fs); // 3-bit filter setting
+    uint8_t iir = BMP390_BASE_VALUE | iir_mask;
+    return write_register(BMP390_IIR_FILTER_CONFIG, iir); // 3-bit filter setting
 }
 
 bool BMP390::set_output_data_rate(uint8_t odr)

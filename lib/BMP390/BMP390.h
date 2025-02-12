@@ -4,36 +4,44 @@
 
 #include <stdint.h>
 
+// UINT8_C is an unsigned 8 bit macro that ensures it stays the same data type regardless of compiler/platform
+
 // ADDRESSES
-#define BMP390_I2C_ADDRESS 0x76
+#define BMP390_I2C_ADDRESS UINT8_C(0x76)
 
 // REGISTERS (p. 30)
-#define BMP390_DEVICE_ID 0x00
-#define BMP390_REV_ID 0x01
-#define BMP390_ERROR_REG 0x02
-#define BMP390_STATUS 0x03
+#define BMP390_DEVICE_ID UINT8_C(0x00)
+#define BMP390_REV_ID UINT8_C(0x01)
+#define BMP390_ERROR_REG UINT8_C(0x02)
+#define BMP390_STATUS UINT8_C(0x03)
 // Pressure Data
-#define BMP390_DATA_0 0x04
-#define BMP390_DATA_1 0x05
-#define BMP390_DATA_2 0x06
+#define BMP390_DATA_0 UINT8_C(0x04)
+#define BMP390_DATA_1 UINT8_C(0x05)
+#define BMP390_DATA_2 UINT8_C(0x06)
 // Temperature Data
-#define BMP390_DATA_3 0x07
-#define BMP390_DATA_4 0x08
-#define BMP390_DATA_5 0x09
+#define BMP390_DATA_3 UINT8_C(0x07)
+#define BMP390_DATA_4 UINT8_C(0x08)
+#define BMP390_DATA_5 UINT8_C(0x09)
 // Sensor Time
-#define BMP390_SENSORTIME_0 0x0C
-#define BMP390_SENSORTIME_1 0x0D
-#define BMP390_SENSORTIME_2 0x0E
+#define BMP390_SENSORTIME_0 UINT8_C(0x0C)
+#define BMP390_SENSORTIME_1 UINT8_C(0x0D)
+#define BMP390_SENSORTIME_2 UINT8_C(0x0E)
 
 // Sensor Config
-#define BMP390_PWR_CTRL 0x1B
-#define BMP390_OSR 0x1C
-#define BMP390_ODR 0x1D
-#define BMP390_IIR_FILTER_CONFIG 0x1F
-#define BMP390_CMD 0x7E
+#define BMP390_PWR_CTRL UINT8_C(0x1B)
+#define BMP390_OSR UINT8_C(0x1C)
+#define BMP390_ODR UINT8_C(0x1D)
+#define BMP390_IIR_FILTER_CONFIG UINT8_C(0x1F)
+#define BMP390_CMD UINT8_C(0x7E)
 
 // Values
-#define SOFT_RESET_VALUE 0xB6
+#define BMP390_BASE_VALUE UINT8_C(0b00000000)
+#define PWR_NORMAL_TP_EN UINT8_C(0b00110011)
+#define OVERSAMPLING_P8X_T2X UINT8_C(0b00001011)
+#define IIR_FILTER_COEFF_1 UINT8_C(0b00000010)
+#define ODR_RATE_50HZ UINT8_C(0x02)
+#define SOFT_RESET_VALUE UINT8_C(0xB6)
+
 class BMP390
 {
 
@@ -48,8 +56,7 @@ public:
   int32_t read_altitude(float seaLevel);
 
   bool set_measurement_mode(uint8_t mode);
-  bool set_temperature_oversampling(uint8_t os);
-  bool set_pressure_oversampling(uint8_t os);
+  bool set_pressure_temperature_oversampling(uint8_t os);
   bool set_IIR_filter_coeff(uint8_t fs);
   bool set_output_data_rate(uint8_t odr);
 
