@@ -25,9 +25,8 @@
 #define BMP390_SENSORTIME_1 0x0D
 #define BMP390_SENSORTIME_2 0x0E
 
-#define BMP390_PWR_CTRL 0x1B
-
 // Sensor Config
+#define BMP390_PWR_CTRL 0x1B
 #define BMP390_OSR 0x1C
 #define BMP390_ODR 0x1D
 #define BMP390_CONFIG 0x1F
@@ -45,10 +44,11 @@ public:
   int32_t read_pressure();
   int32_t read_altitude(float seaLevel);
 
+  bool set_measurement_mode(uint8_t mode);
   bool set_temperature_oversampling(uint8_t os);
   bool set_pressure_oversampling(uint8_t os);
   bool set_IIR_filter_coeff(uint8_t fs);
-  bool set_output_data_rate(uint8_t odr); // Fixed Typo
+  bool set_output_data_rate(uint8_t odr);
 
 private:
   uint8_t i2c_address;

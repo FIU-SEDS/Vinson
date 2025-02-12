@@ -2,10 +2,9 @@
 #include <SPI.h>
 #include "BMP390.h"
 
-#define SEALEVEL 
+#define SEALEVEL
 
 BMP390 bmp;
-
 
 void setup()
 {
@@ -20,10 +19,12 @@ void setup()
   }
   Serial.println("BMP390 initialized successfully!");
 
+  // Turn on the BMP390
+  bmp.set_measurement_mode(0b00011011);
   bmp.set_temperature_oversampling(2);
   bmp.set_pressure_oversampling(2);
-  bmp.set_IIR_filter_coeff(0);
-  bmp.set_output_data_rate(50);
+  bmp.set_IIR_filter_coeff(0b00001010);
+  bmp.set_output_data_rate(0x02);
 }
 
 void loop()
