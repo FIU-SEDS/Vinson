@@ -8,7 +8,7 @@
 
 // arduino nano
 
-#define SEALEVELPRESSURE_HPA (1021)
+#define SEALEVELPRESSURE_HPA (1018)
 
 #define RX_PIN 5 // Connect to TX of RYLR998
 #define TX_PIN 6 // Connect to RX of RYLR998
@@ -60,8 +60,9 @@ void loop()
     return;
   }
 
-  float altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA);
+  float altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA) * 3.28084;
   // String buffer = "ERIELCABRERA";
+  Serial.println(altitude);
   String buffer;
   buffer = String(altitude);
   String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
