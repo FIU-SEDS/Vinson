@@ -8,7 +8,7 @@
 
 // arduino nano
 
-#define SEALEVELPRESSURE_HPA (1018)
+#define SEALEVELPRESSURE_HPA (1018) // MAKE SURE to change to configure altitude to correct LEVELS EVERYTIME
 
 #define RX_PIN 5 // Connect to TX of RYLR998
 #define TX_PIN 6 // Connect to RX of RYLR998
