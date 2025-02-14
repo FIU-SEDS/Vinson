@@ -5,12 +5,16 @@
 
 #define MAIN_IMU_ADDRESS 0x6A
 #define BAROMETER_ADDRESS 0x76
-// #define HTU_ADDRESS 0x40
 
 #define SEA_LEVEL_PRESSURE 1013.25      // provide sea-level pressure (in hPa)
 #define MAIN_DEPLOYMENT_ALTITUDE 1000.0 // Main parachute Deployment altitude in feet
 #define LANDING_ALTITUDE 50             // Ground level altitude in feet (can adjust for launch site)
 #define ACCELERATION_THRESHOLD 10       // Acceleration threshold for "still" in m/s² (near zero)
+
+#define DEBUG 0
+#if DEBUG == 1
+  Serial.println(x); // Ensure 'x' is defined or replace it with the proper debug message.
+#endif
 
 /**
  * @enum RocketState

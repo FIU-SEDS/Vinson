@@ -6,7 +6,7 @@ RocketState currentState = INIT_AND_SYSTEMS_CHECK;
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Wire.begin();
 
   // Perform one-time sensor checks
