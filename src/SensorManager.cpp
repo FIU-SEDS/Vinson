@@ -11,20 +11,16 @@ ASM330LHHSensor mainIMU(&Wire, ASM330LHH_I2C_ADD_L);
 Adafruit_BMP3XX barometer;
 
 // Arrays to hold accelerometer readings
-int32_t mainIMUInitAccelAxes[3] = {}; // For initial acceleration (x, y, z)
 int32_t mainIMUCurrAccelAxes[3] = {}; // For current acceleration (x, y, z)
 
 // Variables that will change over time
-float initialAltitude = 0.0;     // Initial altitude reference
-float initialAcceleration = 0.0; // Initial acceleration reference
-float initialMagnitude = 0.0;    // Initial acceleration magnitude
-float lastAltitude = 0.0;        // Last known altitude
-float lastAccel = 0.0;           // Last known acceleration
+float initialAltitude = 0.0; // Initial altitude reference
+float lastAltitude = 0.0;    // Last known altitude
 
 // Flags and time tracking variables
-// For DeployDrogueParachute()
-bool deployStarted = false;        // Flag to indicate deployment started
+// For DeployDrogueParachute()28084
 unsigned long deployStartTime = 0; // Time tracking for deployment
+unsigned long apogeeStartTime = 0; // Variable to store the last time update was made
 
 /**
  * @brief Prints out a log message for the state of a given parameter.
@@ -100,8 +96,7 @@ bool PowerMainIMU()
 
   mainIMU.Enable_X();
   mainIMU.Enable_G();
-  mainIMU.Get_X_Axes(mainIMUInitAccelAxes);
-  initialMagnitude = sqrt(pow(mainIMUInitAccelAxes[0], 2) + pow(mainIMUInitAccelAxes[1], 2) + pow(mainIMUInitAccelAxes[2], 2));
+  mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
 
   if (mainIMU.verifyTemperature() != ASM330LHH_OK)
   {
@@ -117,8 +112,6 @@ bool PowerMainIMU()
 
   return true;
 }
-
-// *******************************************  BAROMETER INIT *******************************************
 
 /**
  * @brief Powers up the Barometer sensor.
@@ -151,7 +144,7 @@ bool PowerBarometer()
   barometer.setPressureOversampling(BMP3_OVERSAMPLING_4X);
   barometer.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
   barometer.setOutputDataRate(BMP3_ODR_50_HZ);
-  initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084; // using initialAltitude from .h file to set the sea-level altitude in FEET as baseline
+  initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER; // using initialAltitude from .h file to set the sea-level altitude in FEET as baseline
 
   if (!barometer.verifyTemperature())
   {
@@ -215,12 +208,12 @@ bool InitializeAndCheckSensors()
  *  */
 bool CheckLiftoffConditions()
 {
-  float currentAltitude = (barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084) - initialAltitude;
+  float currentAltitude = (barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER) - initialAltitude;
 
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
-  float currentMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) + pow(mainIMUCurrAccelAxes[1], 2) + pow(mainIMUCurrAccelAxes[2], 2));
 
-  return ((currentMagnitude - initialMagnitude) > 0 || currentAltitude > 0);
+  // Check if acceleration exceeds 1.5g (1.5g = 1500 mg)
+  return ((mainIMUCurrAccelAxes[Z] > LIFTOFF_GRAVITY_THRESHOLD) || currentAltitude > LIFTOFF_ALTITUDE_THRESHOLD);
 }
 
 /**
@@ -234,20 +227,29 @@ bool CheckLiftoffConditions()
 bool CheckApogeeConditions()
 {
 
-  float currentAltitude = (barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084) - initialAltitude;
+  float currentAltitude = (barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER) - initialAltitude;
 
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
-  float currentMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) +
-                                pow(mainIMUCurrAccelAxes[1], 2) +
-                                pow(mainIMUCurrAccelAxes[2], 2));
 
-  // 0.5m minimum altitude threshold hardcoded to detect descent
-  bool isDescending = (currentAltitude < lastAltitude - 0.5);
-  // 0.2 minimum deceleration threshold hardcoded to detect descent
-  bool isDecelerating = (currentMagnitude - initialMagnitude) < -0.2;
+  // Check if altitude is descending (using 1 ft as the minimum descent threshold)
+  bool isDescending = (currentAltitude < lastAltitude - APOGEE_ALTITUDE_THRESHOLD);
+
+  // Check if the Z-axis acceleration is close to 0g (freefall condition at apogee)
+  bool isDecelerating = (mainIMUCurrAccelAxes[Z] < APOGEE_GRAVITY_THRESHOLD); // Z-axis acceleration (in mg)
 
   lastAltitude = currentAltitude;
-  lastAccel = currentMagnitude;
+
+  unsigned long currentMillis = millis();
+
+  // Check if 1 second has passed
+  if (currentMillis - apogeeStartTime >= INTERVAL_APOGEE)
+  {
+    // Save the last time you updated
+    apogeeStartTime = currentMillis;
+
+    // Code to run after 1 second has passed
+    CheckApogeeConditions(); // For example, check apogee conditions
+  }
 
   return (isDescending && isDecelerating);
 }
@@ -299,8 +301,9 @@ void DeployDrogueParachute()
     // UNCOMMENT WHEN DETERMINED PINS LOCATION
 
     // digitalWrite(DROGUE_DEPLOY_PIN, HIGH); // Activiates pyro mechanism for drogue parachute
-    delay(100); // Short delay to ensure the signal is registered
-                // digitalWrite(DROGUE_DEPLOY_PIN, LOW);
+    // DONT USE DELAY USE MILLIS()
+    // Short delay to ensure the signal is registered
+    // digitalWrite(DROGUE_DEPLOY_PIN, LOW);
 
 #if DEBUG
     logStatus("Drogue Parachute", "Signal Sent DEPLOYING", true);
@@ -322,7 +325,7 @@ void DeployDrogueParachute()
  */
 bool CheckMainDeploymentConditions()
 {
-  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084; // Converted to feet
+  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER; // Converted to feet
 
   // Check if the rocket has descended to or below the main deployment altitude
   if (currentAltitude <= MAIN_DEPLOYMENT_ALTITUDE)
@@ -355,8 +358,9 @@ void DeployMainParachute()
     // UNCOMMENT WHEN DETERMINED PINS LOCATION
 
     // digitalWrite(MAIN_DEPLOY_PIN, HIGH); // Activiates pyro mechanism for drogue parachute
-    delay(100); // Short delay to ensure the signal is registered
-                // digitalWrite(MAIN_DEPLOY_PIN, LOW);
+    // DONT USE DELAY USE MILLIS()
+    // Short delay to ensure the signal is registered
+    // digitalWrite(MAIN_DEPLOY_PIN, LOW);
 
 #if DEBUG
     logStatus("Main Parachute", "Signal Sent DEPLOYING", true);
@@ -380,13 +384,10 @@ bool CheckLandingConditions()
 {
 
   // Read current altitude from the barometer (convert to feet or meters as needed)
-  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * 3.28084; // Convert to feet if needed
+  float currentAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER; // Convert to feet if needed
 
   // Read current accelerometer data
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
-
-  // Calculate the magnitude of the current acceleration (use existing variables directly)
-  float accelerationMagnitude = sqrt(pow(mainIMUCurrAccelAxes[0], 2) + pow(mainIMUCurrAccelAxes[1], 2) + pow(mainIMUCurrAccelAxes[2], 2));
 
 // Log the current values for debugging (if necessary)
 #if DEBUG
@@ -397,7 +398,7 @@ bool CheckLandingConditions()
   bool altitudeAtGround = (currentAltitude <= LANDING_ALTITUDE);
 
   // Check if the acceleration magnitude is near zero (indicating no significant movement)
-  bool isStationary = (accelerationMagnitude <= ACCELERATION_THRESHOLD);
+  bool isStationary = (mainIMUCurrAccelAxes[Z] <= LANDING_GRAVITY_THRESHOLD);
 
   // If both conditions are met, the rocket is considered landed
   if (altitudeAtGround && isStationary)
