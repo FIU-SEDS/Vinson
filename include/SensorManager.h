@@ -3,7 +3,6 @@
 #define SENSOR_MANAGER_H
 #include <Arduino.h>
 
-#define MAGNETOMETER_ADDRESS 0x30
 #define MAIN_IMU_ADDRESS 0x6A
 #define BAROMETER_ADDRESS 0x76
 // #define HTU_ADDRESS 0x40
@@ -54,11 +53,11 @@ enum CriticalIndex
  *
  * Non-critical sensors provide additional data but are not essential for the rocket's primary functions.
  */
-enum NonCriticalIndex
-{
-  MAGNETOMETER,
-  HTURHT // HTU Relative Humidity and Temperature sensor
-};
+// enum NonCriticalIndex
+// {
+//   MAGNETOMETER,
+//   HTURHT // HTU Relative Humidity and Temperature sensor
+// };
 
 // Initializes and verifies all critical and non-critical sensors.
 bool InitializeAndCheckSensors();
@@ -93,13 +92,7 @@ void StartData();
 // If rocket has landed then stops saving data to SD card and shuts down
 void DumpData();
 
-// Powers up the Magnetometer sensor.
-bool PowerMagnetometer();
-
 // Powers up the Barometer sensor.
 bool PowerBarometer();
-
-// Powers up the HTU sensor
-bool PowerHTU();
 
 #endif

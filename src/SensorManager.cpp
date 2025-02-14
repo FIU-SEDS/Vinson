@@ -1,20 +1,15 @@
 #include "SensorManager.h"
 #include <Arduino.h>
 #include <Wire.h>
-#include <SparkFun_MMC5983MA_Arduino_Library.h> // Magnetometer Library
 #include <ASM330LHHSensor.h>                    // Main IMU Library
 #include <Adafruit_BMP3XX.h>                    // Barometer Library
-#include "Adafruit_HTU21DF.h"                   // HTU Library
 
 
 bool criticalSensors[2];
-bool nonCriticalSensors[2];
 
 // Sensor objects983MA magnetometer;
 ASM330LHHSensor mainIMU(&Wire, ASM330LHH_I2C_ADD_L);
 Adafruit_BMP3XX barometer;
-Adafruit_HTU21DF HTU = Adafruit_HTU21DF();
-SFE_MMC5
 
 // Arrays to hold accelerometer readings
 int32_t mainIMUInitAccelAxes[3] = {}; // For initial acceleration (x, y, z)
@@ -77,39 +72,6 @@ bool isDeviceConnected(uint8_t address)
 {
   Wire.beginTransmission(address);
   return (Wire.endTransmission() == 0); // Returns true if device responds
-}
-
-// *******************************************  MAGNETOMETER INIT *******************************************
-
-/**
- * @brief Powers up the Magnetometer sensor.
- *
- * This function checks the I2C connection to the Magnetometer. If connected, it initializes the
- * magnetometer, performs a soft reset, and verifies the temperature. Logs the status of the power-up process.
- *
- * @return Boolean value: true if the Magnetometer is successfully powered up, false otherwise.
- */
-bool PowerMagnetometer()
-{
-  if (!isDeviceConnected(MAGNETOMETER_ADDRESS))
-    logStatus("Magnetometer", "I2C Start Device Check (Power Up Function)", false);
-  return false;
-
-  if (!magnetometer.begin())
-  {
-    logStatus("Magnetometer", "Power Up", false);
-    return false;
-  }
-  magnetometer.softReset();
-
-  if (!magnetometer.verifyTemperature())
-  {
-    logStatus("Magnetometer", "Temperature Check", false);
-    return false;
-  }
-
-  logStatus("Magnetometer", "Power Up", true);
-  return true;
 }
 
 /**
@@ -189,39 +151,6 @@ bool PowerBarometer()
   logStatus("Barometer", "Power Up", true);
   return true;
 }
-
-/**
- * @brief Powaers up the HTU20DF sensor.
- *
- * This function checks the I2C connection to the HTU20DF sensor. If connected, it initializes the
- * sensor and reads the initial ambient temperature and relative humidity. The status of the
- * power-up process is logged.
- *
- * @return Boolean value: true if the HTU20DF sensor is successfully powered up, false otherwise.
- */
-
-bool PowerHTU()
-{
-  if (!isDeviceConnected(HTU21DF_I2CADDRESS))
-  {
-    logStatus("HTU", "I2C Start Device Check (Power Up Function)", false);
-    return false;
-  }
-
-  if (!HTU.begin())
-  {
-
-    logStatus("HTU", "Power Up", false);
-    return false;
-  }
-
-  initialAmbientTemperature = HTU.readTemperature(); // returned in celsius
-  initialRelativeHumidity = HTU.readHumidity();
-
-  logStatus("HTU", "Power Up", true);
-  return true;
-}
-
 /**
  * @brief Initializes and checks all sensors.
  *
@@ -237,8 +166,6 @@ bool InitializeAndCheckSensors()
 
   criticalSensors[MAIN_IMU] = PowerMainIMU();
   criticalSensors[BAROMETER] = PowerBarometer();
-  nonCriticalSensors[MAGNETOMETER] = PowerMagnetometer();
-  nonCriticalSensors[HTURHT] = PowerHTU();
 
   // Log the status of critical sensors
   Serial.println("[INFO] Critical Sensor Status:");
@@ -247,12 +174,6 @@ bool InitializeAndCheckSensors()
   Serial.print("  Barometer: ");
   Serial.println(criticalSensors[BAROMETER] ? "SUCCESS" : "FAILURE");
 
-  // Log the status of non-critical sensors
-  Serial.println("[INFO] Non-Critical Sensor Status:");
-  Serial.print("  Magnetometer: ");
-  Serial.println(nonCriticalSensors[MAGNETOMETER] ? "SUCCESS" : "FAILURE");
-  Serial.print(" HTU: ");
-  Serial.println(nonCriticalSensors[HTURHT] ? "SUCCESS" : "FAILURE");
 
   // Check if all critical sensors passed
   for (int i = 0; i < 2; i++)
