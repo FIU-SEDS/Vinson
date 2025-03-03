@@ -1,27 +1,46 @@
 import csv
+import serial
+import time
 
 #setting up a serial connection (port and baud rate)
-# ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1) use this when recieving live data
+ser = serial.Serial('/dev/cu.usbmodem11101', 9600, timeout=1) 
+time.sleep(2)
 
-input_file = "logs/altitude_data.log"
+
 output_csv = "parsed_data.csv"
 
 with open(output_csv, mode='w', newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(["Altitude", "RSSI", "Signal"])
+    writer.writerow(["Barometer", "Accelerator", "RSSI", "Signal"])
 
+print("Waiting for LoRa data...")
 #reads the data file and processes each line 
-with open(input_file, 'r') as file:
-    for line in file: 
-        data = line.strip()
-
-        if "Received: +RCV=" in data: 
-            clean_data = data.replace("Received: +RCV=", "")
+try:
+    while True:
+        line = ser.readline().decode('utf-8').strip()  # Read and decode serial data
+        if "Received: +RCV=" in line:
+            clean_data = line.replace("Received: +RCV=", "")
             data_values = clean_data.split(',')
-            last_three = data_values[-3:]
 
-            with open(output_csv, mode = 'a', newline = '') as csvfile: 
-                writer = csv.writer(csvfile)
-                writer.writerow(last_three)
+            if len(data_values) >= 4:  # Ensuring there's enough data
+                altitude = data_values[0]  # Altitude 
+                rssi = data_values[-2]  # RSSI 
+                signal = data_values[-1]  # Signal 
 
-print(f"Data has been written to {output_csv}")
+                barometer_accelerometer = data_values[1].split('/')  # Split by '/'
+                
+                if len(barometer_accelerometer) == 2:
+                    barometer, accelerometer = barometer_accelerometer
+                else:
+                    barometer, accelerometer = "N/A", "N/A"  # handling format errors
+
+                
+                with open(output_csv, mode='a', newline='') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow([altitude, rssi, signal, barometer, accelerometer])
+
+                print(f"Logged data: Altitude={altitude}, RSSI={rssi}, Signal={signal}, Barometer={barometer}, Accelerometer={accelerometer}")
+
+except KeyboardInterrupt:
+    print("\nStopped receiving data.")
+    ser.close()
