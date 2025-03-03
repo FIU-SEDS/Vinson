@@ -1,16 +1,7 @@
-
 #include <Wire.h>
 #include <AHT10.h>
 
-#define LCD_ROWS 4         // qnt. of lcd rows
-#define LCD_COLUMNS 20     // qnt. of lcd columns
-#define DEGREE_SYMBOL 0xDF // degree symbol from LCD ROM
-
 uint8_t readStatus = 0;
-
-const uint8_t temperature_icon[8] PROGMEM = {0x04, 0x0A, 0x0A, 0x0E, 0x0E, 0x1F, 0x1F, 0x0E}; // PROGMEM saves variable to flash & keeps dynamic memory free
-const uint8_t humidity_icon[8] PROGMEM = {0x04, 0x0E, 0x0E, 0x1F, 0x1F, 0x1F, 0x0E, 0x00};
-const uint8_t plus_minus_icon[8] PROGMEM = {0x00, 0x04, 0x0E, 0x04, 0x00, 0x0E, 0x00, 0x00};
 
 AHT10 myAHT10(AHT10_ADDRESS_0X38);
 
