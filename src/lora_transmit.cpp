@@ -9,7 +9,7 @@
 
 // arduino nano
 
-#define SEALEVELPRESSURE_HPA (1018) // MAKE SURE to change to configure altitude to correct LEVELS EVERYTIME
+#define SEALEVELPRESSURE_HPA (1019.50) // MAKE SURE to change to configure altitude to correct LEVELS EVERYTIME
 
 #define RX_PIN 5 // Connect to TX of RYLR998
 #define TX_PIN 6 // Connect to RX of RYLR998
@@ -77,7 +77,8 @@ void loop()
   if (readStatus != AHT10_ERROR)
   {
     Serial.print("AHT10 Humidity: ");
-    Serial.print(myAHT10.readHumidity(AHT10_USE_READ_DATA)); // Use previously read 6 bytes
+    Serial.println(myAHT10.readHumidity(AHT10_USE_READ_DATA)); // Use previously read 6 bytes
+    Serial.print("Altitude: ");
   }
   else
   {
@@ -92,6 +93,7 @@ void loop()
   String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
   loraSerial.println(command);
 
+  Serial.println(bmp.readAltitude(SEALEVELPRESSURE_HPA) * 3.28084);
   Serial.println("SENT");
   delay(2000);
 }
