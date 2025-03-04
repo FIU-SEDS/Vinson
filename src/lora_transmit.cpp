@@ -17,6 +17,7 @@
 SoftwareSerial loraSerial(RX_PIN, TX_PIN);
 Adafruit_BMP3XX bmp;
 uint8_t readStatus = 0;
+unsigned int timer = 0;
 AHT10 myAHT10(AHT10_ADDRESS_0X38);
 
 void setup()
@@ -86,7 +87,8 @@ void loop()
   float altitude = bmp.readAltitude(SEALEVELPRESSURE_HPA) * 3.28084;
   float humidity = myAHT10.readHumidity(AHT10_USE_READ_DATA);
   String buffer;
-  buffer = String(altitude) + "," + String(humidity);
+  buffer = String(altitude) + "," + String(humidity) + "," + String(timer);
+  timer++;
   String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
   loraSerial.println(command);
 
