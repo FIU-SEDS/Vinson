@@ -3,7 +3,8 @@
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BMP3XX.h"
 
-#define SEALEVELPRESSURE_HPA (1013.25)
+#define SEALEVELPRESSURE_HPA (1012.32)
+#define FEET_PER_METER 3.28084 // From meters to feet conversion value
 
 Adafruit_BMP3XX bmp;
 
@@ -23,7 +24,7 @@ void setup()
       ;
   }
 
-  // Set up oversampling and filter initialization 
+  // Set up oversampling and filter initialization
   bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
   bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
@@ -46,8 +47,8 @@ void loop()
   Serial.println(" hPa");
 
   Serial.print("Approx. Altitude = ");
-  Serial.print(bmp.readAltitude(SEALEVELPRESSURE_HPA));
-  Serial.println(" m");
+  Serial.print(bmp.readAltitude(SEALEVELPRESSURE_HPA) * FEET_PER_METER);
+  Serial.println(" ft ");
 
   Serial.println();
   delay(2000);

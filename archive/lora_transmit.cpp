@@ -9,7 +9,7 @@
 
 // arduino nano
 
-#define SEALEVELPRESSURE_HPA (1019.50) // MAKE SURE to change to configure altitude to correct LEVELS EVERYTIME
+#define SEALEVELPRESSURE_HPA (1011.75) // MAKE SURE to change to configure altitude to correct LEVELS EVERYTIME
 
 #define RX_PIN 5 // Connect to TX of RYLR998
 #define TX_PIN 6 // Connect to RX of RYLR998
@@ -94,6 +94,45 @@ void loop()
   loraSerial.println(command);
 
   Serial.println(bmp.readAltitude(SEALEVELPRESSURE_HPA) * 3.28084);
-  Serial.println("SENT");
-  delay(2000);
+
+  delay(1000
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  );
 }
