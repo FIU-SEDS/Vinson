@@ -140,11 +140,34 @@ bool PowerBarometer()
     return false;
   }
 
-  barometer.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-  barometer.setPressureOversampling(BMP3_OVERSAMPLING_4X);
-  barometer.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+  barometer.setTemperatureOversampling(BMP3_OVERSAMPLING_2X);
+  barometer.setPressureOversampling(BMP3_OVERSAMPLING_8X);
+  barometer.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_1);
   barometer.setOutputDataRate(BMP3_ODR_50_HZ);
-  initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER; // using initialAltitude from .h file to set the sea-level altitude in FEET as baseline
+
+  if (!barometer.performReading())
+  {
+    Serial.println("Failed to perform reading :(");
+    return false;
+  }
+
+  // initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER; // using initialAltitude from .h file to set the sea-level altitude in FEET as baseline
+
+  // Serial.print("Initial Altitude: ");
+  // Serial.print(initialAltitude);
+  // Serial.println(" ft");
+
+  for (uint8_t i = 0; i < 2; i++)
+  {
+    Serial.print("Approx. Altitude = ");
+    Serial.print(barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER);
+    Serial.println(" ft ");
+
+    if(i == 1)
+    {
+      initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER;
+    }
+  }
 
   if (!barometer.verifyTemperature())
   {
@@ -173,7 +196,8 @@ bool PowerBarometer()
 bool InitializeAndCheckSensors()
 {
 
-  criticalSensors[MAIN_IMU] = PowerMainIMU();
+  // criticalSensors[MAIN_IMU] = PowerMainIMU();
+  criticalSensors[MAIN_IMU] = true;
   criticalSensors[BAROMETER] = PowerBarometer();
 
 #if DEBUG
@@ -210,6 +234,20 @@ bool CheckLiftoffConditions()
 {
   float currentAltitude = (barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER) - initialAltitude;
 
+  if (!barometer.performReading())
+  {
+    Serial.println("Failed to perform reading :(");
+    return false;
+  }
+  
+  Serial.print("Initial Altitude: ");
+  Serial.print(initialAltitude);
+  Serial.println(" ft");
+
+  Serial.print("Current. Altitude = ");
+  Serial.print(currentAltitude);
+  Serial.println(" ft ");
+
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
 
   // Check if acceleration exceeds 1.5g (1.5g = 1500 mg)
@@ -226,6 +264,18 @@ bool CheckLiftoffConditions()
  */
 bool CheckApogeeConditions()
 {
+
+  if (!barometer.performReading())
+  {
+    Serial.println("Failed to perform reading :(");
+    return false;
+  }
+
+  // initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER; // using initialAltitude from .h file to set the sea-level altitude in FEET as baseline
+
+  // Serial.print("Initial Altitude: ");
+  // Serial.print(initialAltitude);
+  // Serial.println(" ft");
 
   float currentAltitude = (barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER) - initialAltitude;
 

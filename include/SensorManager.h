@@ -6,10 +6,10 @@
 #define MAIN_IMU_ADDRESS 0x6A
 #define BAROMETER_ADDRESS 0x76
 
-#define SEA_LEVEL_PRESSURE 1013.25             // provide sea-level pressure (in hPa)
+#define SEA_LEVEL_PRESSURE (1012.32)             // provide sea-level pressure (in hPa)
 #define FEET_PER_METER 3.28084                 // From meters to feet conversion value
 #define MAIN_DEPLOYMENT_ALTITUDE 1000.0        // Main parachute Deployment altitude in feet
-#define LIFTOFF_ALTITUDE_THRESHOLD 50          // Liftoff level in feet
+#define LIFTOFF_ALTITUDE_THRESHOLD 2          // Liftoff level in feet
 #define LIFTOFF_GRAVITY_THRESHOLD 1500         // 1.5g (1.5g = 1500 mg) 1.5g is 1500 mg which is the unit the IMU measures in
 #define INTERVAL_APOGEE 1000                   // 1 second (1000 ms) interval to measure altitude
 #define APOGEE_GRAVITY_THRESHOLD INT16_C(1000) // 1g in mg for near freefall (apogee detection)
