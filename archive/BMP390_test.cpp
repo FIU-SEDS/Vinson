@@ -3,7 +3,7 @@
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BMP3XX.h"
 
-#define SEALEVELPRESSURE_HPA (1012.32)
+#define SEALEVELPRESSURE_HPA (1013.80)
 #define FEET_PER_METER 3.28084 // From meters to feet conversion value
 
 Adafruit_BMP3XX bmp;
@@ -12,7 +12,10 @@ void setup()
 {
   Serial.begin(9600);
   while (!Serial)
-    ;
+  {
+    Serial.println("Serial Issue");
+  }
+
   Serial.println("Adafruit BMP388 / BMP390 test");
 
   if (!bmp.begin_I2C())

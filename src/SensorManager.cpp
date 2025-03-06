@@ -166,6 +166,9 @@ bool PowerBarometer()
     if(i == 1)
     {
       initialAltitude = barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER;
+      Serial.print("Approx. INITILIZED Altitude = ");
+      Serial.print(barometer.readAltitude(SEA_LEVEL_PRESSURE) * FEET_PER_METER);
+      Serial.println(" ft ");
     }
   }
 
@@ -196,8 +199,7 @@ bool PowerBarometer()
 bool InitializeAndCheckSensors()
 {
 
-  // criticalSensors[MAIN_IMU] = PowerMainIMU();
-  criticalSensors[MAIN_IMU] = true;
+  criticalSensors[MAIN_IMU] = PowerMainIMU();
   criticalSensors[BAROMETER] = PowerBarometer();
 
 #if DEBUG
@@ -240,9 +242,9 @@ bool CheckLiftoffConditions()
     return false;
   }
   
-  Serial.print("Initial Altitude: ");
-  Serial.print(initialAltitude);
-  Serial.println(" ft");
+  // Serial.print("Initial Altitude: ");
+  // Serial.print(initialAltitude);
+  // Serial.println(" ft");
 
   Serial.print("Current. Altitude = ");
   Serial.print(currentAltitude);

@@ -6,7 +6,7 @@
 #define MAIN_IMU_ADDRESS 0x6A
 #define BAROMETER_ADDRESS 0x76
 
-#define SEA_LEVEL_PRESSURE (1012.32)             // provide sea-level pressure (in hPa)
+#define SEA_LEVEL_PRESSURE (1013.80)             // provide sea-level pressure (in hPa)
 #define FEET_PER_METER 3.28084                 // From meters to feet conversion value
 #define MAIN_DEPLOYMENT_ALTITUDE 1000.0        // Main parachute Deployment altitude in feet
 #define LIFTOFF_ALTITUDE_THRESHOLD 2          // Liftoff level in feet
