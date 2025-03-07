@@ -1,6 +1,12 @@
 # av-flight-cmp
 
-SEDS Avionics Team Flight Computer 2024-2025 Season
+ARCHIVE REPO **DOESNT WORK** PURPOSE IS JUST TO USE AS ARCHIVE:
+
+### TWEAKS MADE:
+
+- REMOVED BMP390
+- NOT USING SDCORE JUST REGULAR SD CARD LIB
+- ADDED MAGNETOMETER SENSOR
 
 This repository is the Vinson main flight computer code for the Arduino Nano that will be guiding the rocket. The other repository linked below is the rover computer (ESP-32).
 
