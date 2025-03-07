@@ -1,6 +1,5 @@
 // Includes
 #include <ASM330LHHSensor.h>
-#include <Adafruit_I2CDevice.h>
 
 #ifdef ARDUINO_SAM_DUE
 #define DEV_I2C Wire1
@@ -20,16 +19,6 @@ ASM330LHHSensor AccGyr(&DEV_I2C, ASM330LHH_I2C_ADD_L);
 
 void setup()
 {
-  // Led.
-  pinMode(LED_BUILTIN, OUTPUT);
-
-  // Force INT1 of ASM330LHH low in order to enable I2C
-  pinMode(INT_1, OUTPUT);
-
-  digitalWrite(INT_1, LOW);
-
-  delay(200);
-
   // Initialize serial for output.
   SerialPort.begin(9600);
 
@@ -43,12 +32,6 @@ void setup()
 
 void loop()
 {
-  // Led blinking.
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(250);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(250);
-
   // Read accelerometer and gyroscope.
   int32_t accelerometer[3] = {};
   int32_t gyroscope[3] = {};
@@ -69,4 +52,5 @@ void loop()
   SerialPort.print(" ");
   SerialPort.print(gyroscope[2]);
   SerialPort.println(" |");
+  delay(250);
 }
