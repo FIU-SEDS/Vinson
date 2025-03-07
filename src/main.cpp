@@ -57,14 +57,10 @@ void loop()
   case DROGUE_DEPLOY:
     DeployDrogueParachute();
 
-    if (CheckMainDeploymentConditions()) // Check conditions for main parachute deployment
-    {
-      currentState = MAIN_DEPLOY;
-    }
+    currentState = MAIN_DEPLOY;
     break;
 
   case MAIN_DEPLOY:
-    DeployMainParachute();
 
     if (CheckLandingConditions())
     {
