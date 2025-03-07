@@ -7,8 +7,8 @@
 
 #define SEALEVELPRESSURE_HPA (1011.75) // MAKE SURE to change to configure altitude to correct LEVELS EVERYTIME
 
-#define RX_PIN 5 // Connect to TX of RYLR998
-#define TX_PIN 6 // Connect to RX of RYLR998
+#define RX_PIN 3 // Connect to TX of RYLR998
+#define TX_PIN 2 // Connect to RX of RYLR998
 
 SoftwareSerial loraSerial(RX_PIN, TX_PIN);
 uint8_t readStatus = 0;
