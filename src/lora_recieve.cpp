@@ -5,8 +5,8 @@
 
 // arduino mega
 
-#define RX_PIN 10 // Connect to TX of RYLR998
-#define TX_PIN 11 // Connect to RX of RYLR998
+#define RX_PIN 4 // Connect to TX of RYLR998
+#define TX_PIN 5 // Connect to RX of RYLR998
 
 SoftwareSerial loraSerial(RX_PIN, TX_PIN);
 
