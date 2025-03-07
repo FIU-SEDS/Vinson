@@ -7,14 +7,18 @@ RocketState currentState = INIT_AND_SYSTEMS_CHECK;
 void setup()
 {
   Serial.begin(9600);
+  // Initialize I2C bus.
+  DEV_I2C.begin();
   Wire.begin();
+
+  InitializeLoRa();
 
   // Perform one-time sensor checks
   if (!InitializeAndCheckSensors())
   {
     Serial.println("[CRITICAL] One or more critical sensors failed. Halting...");
-    while (true)
-      ; // Halt on failure
+    // while (true)
+    //   ; // Halt on failure
   }
 
   // Transition to IDLE state for liftoff monitoring
@@ -24,7 +28,8 @@ void setup()
 
 void loop()
 {
-  // TODO Figure out where to implement StartData() to begin data transmission
+  StartData(currentState);
+
   switch (currentState)
   {
   case INIT_AND_SYSTEMS_CHECK:

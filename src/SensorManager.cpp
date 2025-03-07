@@ -2,23 +2,29 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <ASM330LHHSensor.h> // Main IMU Library
+#include <SoftwareSerial.h>
 
 bool criticalSensors[1];
 
 // Sensor objects983MA magnetometer;
-ASM330LHHSensor mainIMU(&Wire, ASM330LHH_I2C_ADD_L);
+ASM330LHHSensor mainIMU(&DEV_I2C, ASM330LHH_I2C_ADD_L);
+SoftwareSerial loraSerial(RX_PIN, TX_PIN);
 
 // Arrays to hold accelerometer readings
 int32_t mainIMUCurrAccelAxes[3] = {}; // For current acceleration (x, y, z)
-
-// Variables that will change over time
-float initialAltitude = 0.0; // Initial altitude reference
-float lastAltitude = 0.0;    // Last known altitude
+int32_t mainIMUCurrGyroAxes[3] = {};  // For current acceleration (x, y, z)
 
 // Flags and time tracking variables
 // For DeployDrogueParachute()28084
 unsigned long deployStartTime = 0; // Time tracking for deployment
 unsigned long apogeeStartTime = 0; // Variable to store the last time update was made
+
+unsigned long startMillis; // some global variables available anywhere in the program
+unsigned long currentMillis;
+const unsigned long interval = 1500;
+int second = 0;
+// Flight Time Elapsed
+unsigned int timer = 0;
 
 /**
  * @brief Prints out a log message for the state of a given parameter.
@@ -66,6 +72,47 @@ bool isDeviceConnected(uint8_t address)
   return (Wire.endTransmission() == 0); // Returns true if device responds
 }
 
+void InitializeLoRa()
+{
+  loraSerial.begin(9600); // LoRa module baud rate
+
+  loraSerial.println("AT+MODE=0"); // Sets radio to transciever mode
+  delay(1000);
+
+  loraSerial.println("AT+ADDRESS=1"); // Sets radio address to 1
+  delay(1000);
+
+  loraSerial.println("AT+BAND=915000000"); // sets bandwith to 915 Mhz
+  delay(1000);
+
+  loraSerial.println("AT+IPR=9600"); // Sets baud rate at 9600
+  delay(1000);                       // Allow module to initialize
+
+  Serial.println("LoRa Transmitter Ready!");
+  startMillis = millis();
+}
+
+void StartData(RocketState current_state)
+{
+  currentMillis = millis();
+
+  while (currentMillis - startMillis >= interval)
+  {
+    startMillis = millis();
+    timer++;
+
+    mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
+    mainIMU.Get_G_Axes(mainIMUCurrGyroAxes);
+
+    String buffer;
+    buffer = String(mainIMUCurrAccelAxes[0]) + "," + String(mainIMUCurrAccelAxes[1]) + "," + String(mainIMUCurrAccelAxes[2]) + "," + String(mainIMUCurrGyroAxes[0]) + "," + String(mainIMUCurrGyroAxes[1]) + "," + String(mainIMUCurrGyroAxes[2]) + "," + String(timer) + "," + String(current_state);
+    timer++;
+
+    String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
+    loraSerial.println(command);
+  }
+}
+
 /**
  * @brief Powers up the Main IMU sensor.
  *
@@ -95,6 +142,7 @@ bool PowerMainIMU()
   mainIMU.Enable_X();
   mainIMU.Enable_G();
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
+  mainIMU.Get_G_Axes(mainIMUCurrGyroAxes);
 
   if (mainIMU.verifyTemperature() != ASM330LHH_OK)
   {
@@ -131,18 +179,7 @@ bool InitializeAndCheckSensors()
   Serial.println("[INFO] Critical Sensor Status:");
   Serial.print("  Main IMU: ");
   Serial.println(criticalSensors[MAIN_IMU] ? "SUCCESS" : "FAILURE");
-  Serial.print("  Barometer: ");
-  Serial.println(criticalSensors[BAROMETER] ? "SUCCESS" : "FAILURE");
 #endif
-
-  // Check if all critical sensors passed
-  for (int i = 0; i < 2; i++)
-  {
-    if (!criticalSensors[i])
-    {
-      return false; // Halt if any critical sensor fails
-    }
-  }
 
   return true; // All critical sensors are operational
 }
@@ -159,6 +196,17 @@ bool InitializeAndCheckSensors()
 bool CheckLiftoffConditions()
 {
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
+
+#if DEBUG
+Serial.println("Aceeleration: [mg]: ");
+  Serial.print(mainIMUCurrAccelAxes[X]);
+  Serial.println(" X");
+  Serial.print(mainIMUCurrAccelAxes[Y]);
+  Serial.println(" Y");
+  Serial.print(mainIMUCurrAccelAxes[Z]);
+  Serial.println(" Z");
+
+#endif
 
   // Check if acceleration exceeds 1.5g (1.5g = 1500 mg)
   return (mainIMUCurrAccelAxes[Z] > LIFTOFF_GRAVITY_THRESHOLD);
@@ -270,7 +318,7 @@ bool CheckLandingConditions()
 
 // Log the current values for debugging (if necessary)
 #if DEBUG
-  logStatus("Landing Check", "Acceleration Magnitude", accelerationMagnitude);
+  // logStatus("Landing Check", "Acceleration Magnitude", );
 #endif
   // Check if the acceleration magnitude is near zero (indicating no significant movement)
   bool isStationary = (mainIMUCurrAccelAxes[Z] <= LANDING_GRAVITY_THRESHOLD);
