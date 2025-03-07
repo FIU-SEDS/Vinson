@@ -1,12 +1,11 @@
 #include <Wire.h>
 #include <SPI.h>
-#include <Adafruit_I2CDevice.h>
 #include <HardwareSerial.h>
 #include <Arduino.h>
 
 void setup()
 {
-  Wire.begin();         // Join I2C bus
+  Wire.begin();       // Join I2C bus
   Serial.begin(9600); // Start serial communication
   while (!Serial)
     ; // Wait for serial monitor
