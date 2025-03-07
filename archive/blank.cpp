@@ -1,5 +1,4 @@
-#include <SPI.h>
-#include <Adafruit_I2CDevice.h>
+#include <Arduino.h>
 
 void setup()
 {
