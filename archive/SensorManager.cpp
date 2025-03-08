@@ -198,7 +198,7 @@ bool CheckLiftoffConditions()
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
 
 #if DEBUG
-Serial.println("Aceeleration: [mg]: ");
+  Serial.println("Aceeleration: [mg]: ");
   Serial.print(mainIMUCurrAccelAxes[X]);
   Serial.println(" X");
   Serial.print(mainIMUCurrAccelAxes[Y]);
@@ -226,18 +226,6 @@ bool CheckApogeeConditions()
 
   // Check if the Z-axis acceleration is close to 0g (freefall condition at apogee)
   bool isDecelerating = (mainIMUCurrAccelAxes[Z] < APOGEE_GRAVITY_THRESHOLD); // Z-axis acceleration (in mg)
-
-  unsigned long currentMillis = millis();
-
-  // Check if 1 second has passed
-  if ((currentMillis - apogeeStartTime) >= INTERVAL_APOGEE)
-  {
-    // Save the last time you updated
-    apogeeStartTime = currentMillis;
-
-    // Code to run after 1 second has passed
-    CheckApogeeConditions(); // For example, check apogee conditions
-  }
 
   return (isDecelerating);
 }

@@ -24,7 +24,7 @@
 #endif
 #define SerialPort Serial
 
-#define DEBUG 1
+#define DEBUG 0
 #if DEBUG == 1
 void logStatus(const char *device, const char *operation, bool success);
 #endif

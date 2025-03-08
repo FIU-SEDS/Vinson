@@ -19,62 +19,91 @@
 
 */
 #include <SD.h>
+#include <SoftwareSerial.h>
 
-const int chipSelect = 10;
+#define RX_PIN 3 // Connect to TX of RYLR998
+#define TX_PIN 2 // Connect to RX of RYLR998
+#define CHIP_SELECT 10
+
+SoftwareSerial loraSerial(RX_PIN, TX_PIN);
 File myFile;
 
-void setup() {
+void setup()
+{
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
+  loraSerial.begin(9600);
   // wait for Serial Monitor to connect. Needed for native USB port boards only:
-  while (!Serial);
+  while (!Serial)
+    ;
+  loraSerial.println("AT+MODE=0"); // Sets radio to transciever mode
+  delay(1000);
+
+  loraSerial.println("AT+ADDRESS=1"); // Sets radio address to 1
+  delay(1000);
+
+  loraSerial.println("AT+BAND=915000000"); // sets bandwith to 915 Mhz
+  delay(1000);
+
+  loraSerial.println("AT+IPR=9600"); // Sets baud rate at 9600
+  delay(1000);                       // Allow module to initialize
+
+  Serial.println("LoRa Transmitter Ready!");
 
   Serial.print("Initializing SD card...");
 
-  if (!SD.begin(chipSelect)) {
+  if (!SD.begin(CHIP_SELECT))
+  {
     Serial.println("initialization failed. Things to check:");
     Serial.println("1. is a card inserted?");
     Serial.println("2. is your wiring correct?");
     Serial.println("3. did you change the chipSelect pin to match your shield or module?");
     Serial.println("Note: press reset button on the board and reopen this Serial Monitor after fixing your issue!");
-    while (true);
+    while (true)
+      ;
   }
 
   Serial.println("initialization done.");
+}
 
+void loop()
+{
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
   myFile = SD.open("test.txt", FILE_WRITE);
-
   // if the file opened okay, write to it:
-  if (myFile) {
+  if (myFile)
+  {
     Serial.print("Writing to test.txt...");
     myFile.println("testing 1, 2, 3.");
     // close the file:
     myFile.close();
     Serial.println("done.");
-  } else {
+    String command = "AT+SEND=2," + String(5) + "," + "HELLO";
+    loraSerial.println(command);
+  }
+  else
+  {
     // if the file didn't open, print an error:
     Serial.println("error opening test.txt");
   }
+  // // re-open the file for reading:
+  // myFile = SD.open("test.txt");
+  // if (myFile)
+  // {
+  //   Serial.println("test.txt:");
 
-  // re-open the file for reading:
-  myFile = SD.open("test.txt");
-  if (myFile) {
-    Serial.println("test.txt:");
-
-    // read from the file until there's nothing else in it:
-    while (myFile.available()) {
-      Serial.write(myFile.read());
-    }
-    // close the file:
-    myFile.close();
-  } else {
-    // if the file didn't open, print an error:
-    Serial.println("error opening test.txt");
-  }
-}
-
-void loop() {
-  // nothing happens after setup
+  //   // read from the file until there's nothing else in it:
+  //   while (myFile.available())
+  //   {
+  //     Serial.write(myFile.read());
+  //   }
+  //   // close the file:
+  //   myFile.close();
+  // }
+  // else
+  // {
+  //   // if the file didn't open, print an error:
+  //   Serial.println("error opening test.txt");
+  // }
 }
