@@ -10,45 +10,20 @@ This repository is the Vinson main flight computer code for the Arduino Nano tha
 
 ### Sensor Libraries Directory:
 
-#### MMC5983 Magnetometer
+#### MMC5983 Barometer
 
-- [Magnetometer Library](https://github.com/sparkfun/SparkFun_MMC5983MA_Magnetometer_Arduino_Library/tree/main)
-- [Magnetometer Datasheet](https://www.memsic.com/Public/Uploads/uploadfile/files/20220119/MMC5983MADatasheetRevA.pdf)
+- [MS5611 Barometer Library](https://github.com/jarzebski/Arduino-MS5611/tree/dev)
+- [Datasheet](https://www.jarzebski.pl/datasheets/MS5611.pdf)
 
-#### MB85RC FRAM
+#### BNO085 9-DOF Orientation IMU
 
-- [FRAM Library](https://github.com/sosandroid/FRAM_MB85RC_I2C)
-
-#### BMP390 Barometer
-
-- [Barometer Library](https://github.com/adafruit/Adafruit_BMP3XX)
-- [BMP390 Datasheet #1 (Adafruit & Bosch)](https://cdn-learn.adafruit.com/assets/assets/000/096/781/original/bst-bmp390-fl000.pdf?1604526926)
-- [BMP390 Datasheet #2 (Bosch)](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp390-ds002.pdf)
-
-#### ASM330LHH Main IMU
-
-- [ASM330 Main IMU](https://github.com/stm32duino/ASM330LHH/tree/main)
-- [Main IMU (ASM330) Datasheet](https://www.st.com/resource/en/datasheet/asm330lhh.pdf)
-- [ASM330 Wiring Diagram](https://github.com/user-attachments/assets/08a4da38-90d2-46dd-91a4-b4015cfabe34)
-
-#### BMI323 Backup IMU
-
-- [BMI323 IMU Library](https://github.com/boschsensortec/BMI323_SensorAPI)
-- [HTU21D Humidity & Temperature Sensor](https://github.com/adafruit/Adafruit_HTU21DF_Library/tree/master)
-
-_The SparkFun Humidity sensor library can be used if the Adafruit one proves too tedious, so the link is provided here:  
-[https://github.com/sparkfun/SparkFun_HTU21D_Breakout_Arduino_Library](https://github.com/sparkfun/SparkFun_HTU21D_Breakout_Arduino_Library)_
-
----
+- [BNO085 9-DOF IMU Product Page](https://www.adafruit.com/product/4754)
+- [Technical Page](https://learn.adafruit.com/adafruit-9-dof-orientation-imu-fusion-breakout-bno085/overview)
 
 ### Sensor I2C Addresses:
 
 - ASM330: `0x6A`
-- Magnetometer: `0x30`
-- BMP390: `0x76`
-- HTU20D: `0x40`
-
----
+- ***
 
 ### GUIDELINES for Setting up Platform.IO
 
