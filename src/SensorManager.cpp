@@ -106,7 +106,6 @@ void StartData(RocketState current_state)
 
     String buffer;
     buffer = String(mainIMUCurrAccelAxes[0]) + "," + String(mainIMUCurrAccelAxes[1]) + "," + String(mainIMUCurrAccelAxes[2]) + "," + String(mainIMUCurrGyroAxes[0]) + "," + String(mainIMUCurrGyroAxes[1]) + "," + String(mainIMUCurrGyroAxes[2]) + "," + String(timer) + "," + String(current_state);
-    timer++;
 
     String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
     loraSerial.println(command);

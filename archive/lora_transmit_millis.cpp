@@ -45,20 +45,20 @@ File file;
 
 void StartData()
 {
-  file = SD.open("test.txt", FILE_WRITE);
-  if (file)
-  {
-    Serial.print("Writing to test.txt...");
-    file.println("testing 1, 2, 3.");
-    // close the file:
-    file.close();
-    Serial.println("done.");
-  }
-  else
-  {
-    // if the file didn't open, print an error:
-    Serial.println("error opening test.txt");
-  }
+  // file = SD.open("test.txt", FILE_WRITE);
+  // if (file)
+  // {
+  //   Serial.print("Writing to test.txt...");
+  //   file.println("testing 1, 2, 3.");
+  //   // close the file:
+  //   file.close();
+  //   Serial.println("done.");
+  // }
+  // else
+  // {
+  //   // if the file didn't open, print an error:
+  //   Serial.println("error opening test.txt");
+  // }
 
   // Read accelerometer and gyroscope.
   currentMillis = millis();
@@ -109,18 +109,18 @@ void setup()
 
   InitializeLoRa();
 
-  if (!SD.begin(CHIP_SELECT))
-  {
-    Serial.println("initialization failed. Things to check:");
-    Serial.println("1. is a card inserted?");
-    Serial.println("2. is your wiring correct?");
-    Serial.println("3. did you change the chipSelect pin to match your shield or module?");
-    Serial.println("Note: press reset button on the board and reopen this Serial Monitor after fixing your issue!");
-    while (true)
-      ;
-  }
+  // if (!SD.begin(CHIP_SELECT))
+  // {
+  //   Serial.println("initialization failed. Things to check:");
+  //   Serial.println("1. is a card inserted?");
+  //   Serial.println("2. is your wiring correct?");
+  //   Serial.println("3. did you change the chipSelect pin to match your shield or module?");
+  //   Serial.println("Note: press reset button on the board and reopen this Serial Monitor after fixing your issue!");
+  //   while (true)
+  //     ;
+  // }
 
-  Serial.println("SD initialization done!");
+  // Serial.println("SD initialization done!");
 
   // Initilizing Magnetometer
   if (magnetometer.begin() == false)
