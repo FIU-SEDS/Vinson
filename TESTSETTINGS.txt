@@ -1,0 +1,37 @@
+#include <Arduino.h>
+
+#define LORA_BAUD 115200
+
+void sendCommand(const char* command);
+void sendData(const char* message);
+
+void setup() {
+  Serial.begin(LORA_BAUD);
+  delay(1000);
+
+  sendCommand("AT+FACTORY");  // Reset settings
+  delay(1000);
+
+  sendCommand("AT+ADDRESS=1");  
+  sendCommand("AT+NETWORKID=6");  
+  sendCommand("AT+PARAMETER=9,7,1,12");  // Reliable factory settings
+  sendCommand("AT+CRFOP=15");    
+}
+
+void loop() {
+  sendData("204,8,999,770,-1470,-490,34,1,-47,11.0");  
+  delay(250);  // Balanced speed
+}
+
+void sendCommand(const char* command) {
+  Serial.println(command);
+  delay(50);
+}
+
+void sendData(const char* message) {
+  Serial.print("AT+SEND=2,");
+  Serial.print(strlen(message));
+  Serial.print(",");
+  Serial.println(message);
+  delay(50);  // Small delay to avoid flooding LoRa
+}
