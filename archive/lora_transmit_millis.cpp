@@ -78,6 +78,7 @@ void StartData()
 
     String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
     loraSerial.println(command);
+    Serial.println("SENT");
   }
 }
 
@@ -93,7 +94,7 @@ void InitializeLoRa()
   loraSerial.println("AT+BAND=915000000"); // sets bandwith to 915 Mhz
   delay(1000);
 
-  loraSerial.println("AT+IPR=9600"); // Sets baud rate at 9600
+  loraSerial.println("AT+IPR=115200"); // Sets baud rate at 9600
   delay(1000);                       // Allow module to initialize
 
   Serial.println("LoRa Transmitter Ready!");
@@ -102,8 +103,8 @@ void InitializeLoRa()
 
 void setup()
 {
-  Serial.begin(9600);     // Serial Monitor
-  loraSerial.begin(9600); // LoRa module baud rate
+  Serial.begin(115200);     // Serial Monitor
+  loraSerial.begin(115200); // LoRa module baud rate
   DEV_I2C.begin();
   Wire.begin();
 

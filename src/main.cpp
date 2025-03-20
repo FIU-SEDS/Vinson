@@ -6,7 +6,7 @@ RocketState currentState = INIT_AND_SYSTEMS_CHECK;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   // Initialize I2C bus.
   DEV_I2C.begin();
   Wire.begin();

@@ -2,13 +2,13 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <ASM330LHHSensor.h> // Main IMU Library
-#include <SoftwareSerial.h>
+// #include <SoftwareSerial.h>
 
 bool criticalSensors[1];
 
 // Sensor objects983MA magnetometer;
 ASM330LHHSensor mainIMU(&DEV_I2C, ASM330LHH_I2C_ADD_L);
-SoftwareSerial loraSerial(RX_PIN, TX_PIN);
+// SoftwareSerial loraSerial(RX_PIN, TX_PIN);
 
 // Arrays to hold accelerometer readings
 int32_t mainIMUCurrAccelAxes[3] = {}; // For current acceleration (x, y, z)
@@ -21,7 +21,7 @@ unsigned long apogeeStartTime = 0; // Variable to store the last time update was
 
 unsigned long startMillis; // some global variables available anywhere in the program
 unsigned long currentMillis;
-const unsigned long interval = 1500;
+const unsigned long interval = 300;
 int second = 0;
 // Flight Time Elapsed
 unsigned int timer = 0;
@@ -74,18 +74,18 @@ bool isDeviceConnected(uint8_t address)
 
 void InitializeLoRa()
 {
-  loraSerial.begin(9600); // LoRa module baud rate
+  Serial.begin(115200); // LoRa module baud rate
 
-  loraSerial.println("AT+MODE=0"); // Sets radio to transciever mode
+  Serial.println("AT+MODE=0"); // Sets radio to transciever mode
   delay(1000);
 
-  loraSerial.println("AT+ADDRESS=1"); // Sets radio address to 1
+  Serial.println("AT+ADDRESS=1"); // Sets radio address to 1
   delay(1000);
 
-  loraSerial.println("AT+BAND=915000000"); // sets bandwith to 915 Mhz
+  Serial.println("AT+BAND=915000000"); // sets bandwith to 915 Mhz
   delay(1000);
 
-  loraSerial.println("AT+IPR=9600"); // Sets baud rate at 9600
+  Serial.println("AT+IPR=115200"); // Sets baud rate at 115200
   delay(1000);                       // Allow module to initialize
 
   Serial.println("LoRa Transmitter Ready!");
@@ -98,7 +98,7 @@ void StartData(RocketState current_state)
 
   while (currentMillis - startMillis >= interval)
   {
-    startMillis = millis();
+    startMillis = currentMillis;
     timer++;
 
     mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
@@ -108,7 +108,7 @@ void StartData(RocketState current_state)
     buffer = String(mainIMUCurrAccelAxes[0]) + "," + String(mainIMUCurrAccelAxes[1]) + "," + String(mainIMUCurrAccelAxes[2]) + "," + String(mainIMUCurrGyroAxes[0]) + "," + String(mainIMUCurrGyroAxes[1]) + "," + String(mainIMUCurrGyroAxes[2]) + "," + String(timer) + "," + String(current_state);
 
     String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
-    loraSerial.println(command);
+    Serial.println(command);
   }
 }
 
