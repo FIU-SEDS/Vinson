@@ -2,7 +2,7 @@
 #include <SPI.h>
 #include <SD.h>
 
-#define CHIP_SELECT 10 // SD Card Chip Select Pin
+#define CHIP_SELECT 4 // SD Card Chip Select Digital Pin 4
 
 File logFile;
 
