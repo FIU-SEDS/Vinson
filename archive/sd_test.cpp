@@ -8,7 +8,7 @@ File logFile;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial)
   {
     ; // Wait for Serial Monitor to open (for debugging on boards like Leonardo)
