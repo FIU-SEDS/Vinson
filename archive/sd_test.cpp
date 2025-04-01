@@ -28,7 +28,7 @@ void setup()
 
 void logData()
 {
-  logFile = SD.open("data.txt", FILE_WRITE);
+  logFile = SD.open("flight.txt", FILE_WRITE);
 
   if (logFile)
   {

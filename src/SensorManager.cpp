@@ -2,12 +2,15 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <ASM330LHHSensor.h> // Main IMU Library
+#include <SD.h>
+#include <SPI.h>
 // #include <SoftwareSerial.h>
 
 bool criticalSensors[1];
 
 // Sensor objects983MA magnetometer;
 ASM330LHHSensor mainIMU(&DEV_I2C, ASM330LHH_I2C_ADD_L);
+File logFile;
 // SoftwareSerial loraSerial(RX_PIN, TX_PIN);
 
 // Arrays to hold accelerometer readings
@@ -86,9 +89,19 @@ void InitializeLoRa()
   delay(1000);
 
   Serial.println("AT+IPR=115200"); // Sets baud rate at 115200
-  delay(1000);                       // Allow module to initialize
+  delay(1000);                     // Allow module to initialize
 
   Serial.println("LoRa Transmitter Ready!");
+
+  if (SD.begin(CHIP_SELECT_PIN))
+  {
+    Serial.println("SD initialization successful!");
+  }
+  else
+  {
+    Serial.println("SD card initialized failed.");
+  }
+
   startMillis = millis();
 }
 
@@ -108,6 +121,19 @@ void StartData(RocketState current_state)
     buffer = String(mainIMUCurrAccelAxes[0]) + "," + String(mainIMUCurrAccelAxes[1]) + "," + String(mainIMUCurrAccelAxes[2]) + "," + String(mainIMUCurrGyroAxes[0]) + "," + String(mainIMUCurrGyroAxes[1]) + "," + String(mainIMUCurrGyroAxes[2]) + "," + String(timer) + "," + String(current_state);
 
     String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
+    logFile = SD.open("flight.txt", FILE_WRITE);
+
+    if (logFile)
+    {
+      logFile.println(command);
+      logFile.close();
+      // Serial.println("Logged: " + command);
+    }
+    else
+    {
+      Serial.println("Error opening data.txt");
+    }
+
     Serial.println(command);
   }
 }

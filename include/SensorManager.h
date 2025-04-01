@@ -8,6 +8,8 @@
 #define RX_PIN 3 // Connect to TX of RYLR998
 #define TX_PIN 2 // Connect to RX of RYLR998
 
+#define CHIP_SELECT_PIN 10 // SD Card Chip Select Digital Pin 10
+
 #define INTERVAL_APOGEE 1000                   // 1 second (1000ms) to measure if in apogee
 #define LIFTOFF_GRAVITY_THRESHOLD 1200         // 1.5g (1.5g = 1500 mg) 1.5g is 1500 mg
 #define APOGEE_GRAVITY_THRESHOLD INT16_C(1000) // 1g in mg for near freefall (apogee detection)
