@@ -255,7 +255,7 @@ bool CheckApogeeConditions()
   return (isDecelerating);
 }
 
-// NOTE: The static keyword in these functions is used to declare variables whose values persist across multiple calls to the function, rather than being reinitialized each time the function is invoked. (so every time the function is called it is not reset to 0 rather it keeps its value)
+// NOTE: The static keyword in these functions is used to declare variables whose values persist across multiple calls to the function, rather than being reinitialized each time the function is invoked. (so every time the function is called it is not reset to 0 rather it keeps its value)   
 
 /**
  * @brief Checks if five seconds have passed since apogee to deploy drogue parachutes.
