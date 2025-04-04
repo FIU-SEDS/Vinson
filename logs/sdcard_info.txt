@@ -1,0 +1,13 @@
+SD Initialization: SUCCESS
+MBR Reading: SUCESS
+
+SD Card Information:
+Physical Drive: 0
+Timestamp: 0:0:0
+Disk Signature: 9337B8B500
+Partition 1
+        Bootable: NO
+        Partition Type: C
+        LBA: 00200
+        Blocks: 60424192
+        Size: 29504 MB
