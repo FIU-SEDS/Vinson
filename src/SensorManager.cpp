@@ -28,6 +28,7 @@ const unsigned long interval = 300;
 int second = 0;
 // Flight Time Elapsed
 unsigned int timer = 0;
+bool sd_card_available = false;
 
 /**
  * @brief Prints out a log message for the state of a given parameter.
@@ -93,13 +94,16 @@ void InitializeLoRa()
 
   Serial.println("LoRa Transmitter Ready!");
 
-  if (SD.begin(CHIP_SELECT_PIN))
+  pinMode(CHIP_SELECT_PIN, OUTPUT); // Make sure CS pin is set as output
+  sd_card_available = SD.begin(CHIP_SELECT_PIN);
+
+  if (sd_card_available)
   {
     Serial.println("SD initialization successful!");
   }
   else
   {
-    Serial.println("SD card initialized failed.");
+    Serial.println("SD card not detected. Continuing without logging.");
   }
 
   startMillis = millis();
@@ -121,17 +125,25 @@ void StartData(RocketState current_state)
     buffer = String(mainIMUCurrAccelAxes[0]) + "," + String(mainIMUCurrAccelAxes[1]) + "," + String(mainIMUCurrAccelAxes[2]) + "," + String(mainIMUCurrGyroAxes[0]) + "," + String(mainIMUCurrGyroAxes[1]) + "," + String(mainIMUCurrGyroAxes[2]) + "," + String(timer) + "," + String(current_state);
 
     String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
-    logFile = SD.open("flight.txt", FILE_WRITE);
 
-    if (logFile)
+    if (sd_card_available)
     {
-      logFile.println(command);
-      logFile.close();
-      // Serial.println("Logged: " + command);
+      Serial.println("SD initialization successful!");
+      logFile = SD.open("flight.txt", FILE_WRITE);
+      if (logFile)
+      {
+        logFile.println(command);
+        logFile.close();
+        // Serial.println("Logged: " + command);
+      }
+      else
+      {
+        Serial.println("Error opening data.txt");
+      }
     }
     else
     {
-      Serial.println("Error opening data.txt");
+      Serial.println("SD card initialized failed.");
     }
 
     Serial.println(command);
@@ -255,7 +267,7 @@ bool CheckApogeeConditions()
   return (isDecelerating);
 }
 
-// NOTE: The static keyword in these functions is used to declare variables whose values persist across multiple calls to the function, rather than being reinitialized each time the function is invoked. (so every time the function is called it is not reset to 0 rather it keeps its value)   
+// NOTE: The static keyword in these functions is used to declare variables whose values persist across multiple calls to the function, rather than being reinitialized each time the function is invoked. (so every time the function is called it is not reset to 0 rather it keeps its value)
 
 /**
  * @brief Checks if five seconds have passed since apogee to deploy drogue parachutes.

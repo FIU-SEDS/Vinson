@@ -1,0 +1,9 @@
+AT+MODE=0
+AT+ADDRESS=1
+AT+BAND=915000000
+AT+IPR=115200
+LoRa Transmitter Ready!
+[INFO] System ready. Awaiting liftoff.
+[STATE] Transitioning to BOOST phase.
+SD card initialized failed.
+AT+SEND=2,29,-93,7,1015,700,-1470,-490,1,2

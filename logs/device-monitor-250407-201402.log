@@ -1,0 +1,97 @@
+AT+MODE=0
+AT+ADDRESS=1
+AT+BAND=915000000
+AT+IPR=115200
+LoRa Transmitter Ready!
+SD initialization successful!
+[INFO] System ready. Awaiting liftoff.
+[STATE] Transitioning to BOOST phase.
+SD initialization successful!
+AT+SEND=2,31,-86,126,1010,490,-1750,-490,1,2
+SD initialization successful!
+AT+SEND=2,31,-86,127,1010,700,-1470,-420,2,2
+SD initialization successful!
+AT+SEND=2,31,-86,125,1005,630,-1400,-490,3,2
+SD initialization successful!
+AT+SEND=2,31,-86,125,1008,770,-1470,-490,4,2
+SD initialization successful!
+AT+SEND=2,31,-86,126,1008,700,-1400,-420,5,2
+SD initialization successful!
+AT+SEND=2,31,-85,127,1008,630,-1470,-490,6,2
+SD initialization successful!
+AT+SEND=2,31,-87,127,1007,700,-1470,-490,7,2
+SD initialization successful!
+AT+SEND=2,31,-87,128,1004,700,-1400,-490,8,2
+[STATE] Transitioning to APOGEE phase.
+SD initialization successful!
+AT+SEND=2,31,-86,125,1005,630,-1610,-420,9,3
+SD initialization successful!
+AT+SEND=2,32,-86,126,1008,700,-1400,-420,10,3
+SD initialization successful!
+AT+SEND=2,32,-87,126,1007,770,-1470,-490,11,3
+SD initialization successful!
+AT+SEND=2,32,-86,126,1007,770,-1400,-490,12,3
+SD initialization successful!
+AT+SEND=2,32,-87,127,1007,700,-1540,-490,13,3
+SD initialization successful!
+AT+SEND=2,32,-86,124,1008,700,-1540,-490,14,3
+SD initialization successful!
+AT+SEND=2,32,-86,127,1007,770,-1400,-490,15,3
+SD initialization successful!
+AT+SEND=2,32,-85,126,1008,700,-1400,-490,16,3
+SD initialization successful!
+AT+SEND=2,32,-88,125,1009,770,-1400,-490,17,3
+SD initialization successful!
+AT+SEND=2,32,-83,127,1008,700,-1400,-420,18,3
+SD initialization successful!
+AT+SEND=2,32,-85,127,1007,770,-1400,-490,19,3
+SD initialization successful!
+AT+SEND=2,32,-87,128,1006,770,-1400,-490,20,3
+SD initialization successful!
+AT+SEND=2,32,-86,126,1007,700,-1400,-490,21,3
+SD initialization successful!
+AT+SEND=2,32,-79,123,1024,-70,-2730,-490,22,3
+SD initialization successful!
+AT+SEND=2,32,-83,122,1008,770,-1400,-560,23,3
+SD initialization successful!
+AT+SEND=2,32,-84,123,1008,840,-1400,-560,24,3
+SD initialization successful!
+AT+SEND=2,32,-85,123,1008,700,-1540,-490,25,3
+SD initialization successful!
+AT+SEND=2,32,-84,121,1006,770,-1400,-490,26,5
+SD initialization successful!
+AT+SEND=2,32,-85,126,1012,980,-1470,-560,27,5
+SD initialization successful!
+AT+SEND=2,32,-85,122,1007,700,-1470,-490,28,5
+SD initialization successful!
+AT+SEND=2,31,-42,139,989,8470,5740,3570,29,6
+SD initialization successful!
+AT+SEND=2,33,-65,120,1006,770,-2450,-8750,30,6
+SD initialization successful!
+AT+SEND=2,34,-60,120,1008,-420,-7070,-7350,31,6
+SD initialization successful!
+AT+SEND=2,32,-66,115,1013,630,-2520,-700,32,6
+SD initialization successful!
+AT+SEND=2,31,-63,107,1029,420,-2240,980,33,6
+SD initialization successful!
+AT+SEND=2,30,-74,116,983,-980,140,5180,34,6
+SD initialization successful!
+AT+SEND=2,33,-53,126,990,-490,-2590,-2380,35,6
+SD initialization successful!
+AT+SEND=2,32,-80,140,1021,2520,4480,8190,36,6
+SD initialization successful!
+AT+SEND=2,32,-53,107,1052,3990,3500,2450,37,6
+SD initialization successful!
+AT+SEND=2,32,-72,108,1015,1120,-700,-420,38,6
+SD initialization successful!
+AT+SEND=2,30,-80,110,992,70,-1890,-490,39,6
+SD initialization successful!
+AT+SEND=2,32,-77,112,1005,700,-1400,-490,40,6
+SD initialization successful!
+AT+SEND=2,32,-76,110,1009,770,-1260,-490,41,6
+SD initialization successful!
+AT+SEND=2,32,-77,111,1008,700,-1400,-490,42,6
+SD initialization successful!
+AT+SEND=2,33,-79,114,1009,2100,-1680,-350,43,6
+SD initialization successful!
+AT+SEND=2,36,113,19,1143,3360,-132440,-56770,44,6

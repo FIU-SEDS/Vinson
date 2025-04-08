@@ -1,0 +1,11 @@
+AT+MODE=0
+AT+ADDRESS=1
+AT+BAND=915000000
+AT+IPR=115200
+LoRa Transmitter Ready!
+SD initialization successful!
+[INFO] System ready. Awaiting liftoff.
+[STATE] Transitioning to BOOST phase.
+[STATE] Transitioning to APOGEE phase.
+AT+SEND=2,34,-98,132,1012,-1540,-2100,-2170,1,3
+SD initialization successful!

@@ -61,7 +61,6 @@ void loop()
 
   case DROGUE_DEPLOY:
     DeployDrogueParachute();
-
     currentState = MAIN_DEPLOY;
     break;
 
