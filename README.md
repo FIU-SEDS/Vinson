@@ -4,11 +4,6 @@ SEDS Avionics Team Flight Computer 2024-2025 Season
 
 ### Sensor Libraries Directory:
 
-#### MMC5983 Magnetometer
-
-- [Magnetometer Library](https://github.com/sparkfun/SparkFun_MMC5983MA_Magnetometer_Arduino_Library/tree/main)
-- [Magnetometer Datasheet](https://www.memsic.com/Public/Uploads/uploadfile/files/20220119/MMC5983MADatasheetRevA.pdf)
-
 #### ASM330LHH Main IMU
 
 - [ASM330 Main IMU](https://github.com/stm32duino/ASM330LHH/tree/main)
@@ -23,6 +18,9 @@ SEDS Avionics Team Flight Computer 2024-2025 Season
 - Magnetometer: `0x30`
 
 ---
+
+### LESSONS learned from VINSON FLIGHT COMPUTER SUBSCALE:
+- **IGNORE .PIO Folder:** ADD the `.pio` to the .gitignore to not flood the git repository and add any sensor  functions from the sensor library to a seperate header file
 
 ### GUIDELINES for Setting up Platform.IO
 
