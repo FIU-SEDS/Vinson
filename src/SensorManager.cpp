@@ -25,7 +25,7 @@ unsigned long startMillis;         // some global variables available anywhere i
 unsigned long currentMillis;
 const unsigned long interval = 300;
 unsigned int timer = 0;           // Flight Time Elapsed
-bool sd_card_available = false;   // SD card detection
+bool sdCardAvailable = false;   // SD card detection
 bool dataCollectionActive = true; // SD card flag to stop saving data
 
 /**
@@ -93,9 +93,9 @@ void InitializeLoRa()
   Serial.println("LoRa Transmitter Ready!");
 
   pinMode(CHIP_SELECT_PIN, OUTPUT); // Make sure CS pin is set as output
-  sd_card_available = SD.begin(CHIP_SELECT_PIN);
+  sdCardAvailable = SD.begin(CHIP_SELECT_PIN);
 
-  if (sd_card_available)
+  if (sdCardAvailable)
   {
     Serial.println("SD initialization successful!");
   }
@@ -135,7 +135,7 @@ void StartData(RocketState current_state)
     String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
 
     // Log to SD card if available
-    if (sd_card_available)
+    if (sdCardAvailable)
     {
       logFile = SD.open("flight.txt", FILE_WRITE);
       if (logFile)
@@ -249,7 +249,7 @@ bool CheckLiftoffConditions()
 
 #endif
 
-  // Check if acceleration exceeds 1.5g (1.5g = 1500 mg)
+  // Check if acceleration exceeds Liftoff threshold value
   return (mainIMUCurrAccelAxes[Z] > LIFTOFF_GRAVITY_THRESHOLD);
 }
 
@@ -413,7 +413,7 @@ void DumpData()
     Serial.println(finalStatus);
 
     // Save final status if SD card available
-    if (sd_card_available)
+    if (sdCardAvailable)
     {
       // Write a final entry with conclusion timestamp
       logFile = SD.open("flight.txt", FILE_WRITE);
