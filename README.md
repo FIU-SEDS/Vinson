@@ -22,6 +22,8 @@ SEDS Avionics Team Flight Computer 2024-2025 Season
 ### LESSONS learned from VINSON FLIGHT COMPUTER SUBSCALE:
 - **IGNORE .PIO Folder:** ADD the `.pio` to the .gitignore to not flood the git repository and add any sensor  functions from the sensor library to a seperate header file
 
+---
+
 ### GUIDELINES for Setting up Platform.IO
 
 - **Single Main File:** Ensure there is only **ONE** `.cpp` file that contains `setup()` and `loop()` in your `src` directory. Multiple files with these functions will cause compilation errors.
@@ -29,6 +31,8 @@ SEDS Avionics Team Flight Computer 2024-2025 Season
 - **Test Folder Usage:** Unless you are actively testing, **do not** place any files in the `test` folder as it may cause errors.
 - **Include Folder:** Any custom header files should be placed in the `include` folder, which is recognized by PlatformIO as the location for header files.
 - **Corresponding File (.cpp) for Custom Header Files** for the `.cpp` file that corresponds to the header file in the `include` folder make sure that it is placed in the `src` folder so that platformIO can recognize it.
+
+---
 
 # Commenting Standards
 
