@@ -10,10 +10,13 @@
 
 #define CHIP_SELECT_PIN 10 // SD Card Chip Select Digital Pin 10
 
-#define INTERVAL_APOGEE 1000                   // 1 second (1000ms) to measure if in apogee
-#define LIFTOFF_GRAVITY_THRESHOLD 1200         // 1.5g (1.5g = 1500 mg) 1.5g is 1500 mg
-#define APOGEE_GRAVITY_THRESHOLD INT16_C(1000) // 1g in mg for near freefall (apogee detection)
-#define LANDING_GRAVITY_THRESHOLD 1000         // indicating minimal vertical movement in mg after landing
+#define LIFTOFF_GRAVITY_THRESHOLD 2000      // 2g (2000 mg) for definitive launch detection
+#define APOGEE_GRAVITY_THRESHOLD 650        // 0.65g (650 mg) for microgravity at apogee
+#define LANDING_GRAVITY_THRESHOLD_LOW 500   // 0.5g lower bound for landing
+#define LANDING_GRAVITY_THRESHOLD_HIGH 1500 // 2g upper bound for landing
+#define LANDING_SAMPLE_COUNT 100            // Number of consistent samples to confirm landing
+
+extern bool dataCollectionActive;
 
 #ifdef ARDUINO_SAM_DUE
 #define DEV_I2C Wire1
@@ -70,17 +73,6 @@ enum Axes
   X,
   Y,
   Z
-};
-
-/**
- * @enum NonCriticalIndex
- * @brief Indices representing non-critical sensors in the system.
- *
- * Non-critical sensors provide additional data but are not essential for the rocket's primary functions.
- */
-enum NonCriticalIndex
-{
-  MAGNETOMETER
 };
 
 // Initializes LoRa radio

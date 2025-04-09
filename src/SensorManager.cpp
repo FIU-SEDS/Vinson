@@ -21,14 +21,12 @@ int32_t mainIMUCurrGyroAxes[3] = {};  // For current acceleration (x, y, z)
 // For DeployDrogueParachute()28084
 unsigned long deployStartTime = 0; // Time tracking for deployment
 unsigned long apogeeStartTime = 0; // Variable to store the last time update was made
-
-unsigned long startMillis; // some global variables available anywhere in the program
+unsigned long startMillis;         // some global variables available anywhere in the program
 unsigned long currentMillis;
 const unsigned long interval = 300;
-int second = 0;
-// Flight Time Elapsed
-unsigned int timer = 0;
-bool sd_card_available = false;
+unsigned int timer = 0;           // Flight Time Elapsed
+bool sd_card_available = false;   // SD card detection
+bool dataCollectionActive = true; // SD card flag to stop saving data
 
 /**
  * @brief Prints out a log message for the state of a given parameter.
@@ -111,21 +109,32 @@ void InitializeLoRa()
 
 void StartData(RocketState current_state)
 {
-  currentMillis = millis();
 
+  // If data collection has been stopped, don't collect or transmit
+  if (!dataCollectionActive)
+  {
+    return;
+  }
+
+  // Only process data at specified intervals
+  currentMillis = millis();
   if (currentMillis - startMillis >= interval)
   {
     startMillis = currentMillis;
     timer++;
 
+    // Getting sensor data
     mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
     mainIMU.Get_G_Axes(mainIMUCurrGyroAxes);
 
+    // Build data string
     String buffer;
     buffer = String(mainIMUCurrAccelAxes[0]) + "," + String(mainIMUCurrAccelAxes[1]) + "," + String(mainIMUCurrAccelAxes[2]) + "," + String(mainIMUCurrGyroAxes[0]) + "," + String(mainIMUCurrGyroAxes[1]) + "," + String(mainIMUCurrGyroAxes[2]) + "," + String(timer) + "," + String(current_state);
 
+    // Create LoRa command
     String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
 
+    // Log to SD card if available
     if (sd_card_available)
     {
       logFile = SD.open("flight.txt", FILE_WRITE);
@@ -140,6 +149,7 @@ void StartData(RocketState current_state)
       }
     }
 
+    // Always send data over LoRa regardless of SD card status
     Serial.println(command);
   }
 }
@@ -256,9 +266,16 @@ bool CheckApogeeConditions()
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
 
   // Check if the Z-axis acceleration is close to 0g (freefall condition at apogee)
-  bool isDecelerating = (mainIMUCurrAccelAxes[Z] < APOGEE_GRAVITY_THRESHOLD); // Z-axis acceleration (in mg)
+  bool isNearMicrogravity = (abs(mainIMUCurrAccelAxes[Z]) < APOGEE_GRAVITY_THRESHOLD); // Z-axis acceleration (in mg)
 
-  return (isDecelerating);
+#if DEBUG
+  Serial.print("Z acceleration at apogee check: ");
+  Serial.print(mainIMUCurrAccelAxes[Z]);
+  Serial.print(" mg, Near microgravity: ");
+  Serial.println(isNearMicrogravity ? "YES" : "NO");
+#endif
+
+  return isNearMicrogravity;
 }
 
 // NOTE: The static keyword in these functions is used to declare variables whose values persist across multiple calls to the function, rather than being reinitialized each time the function is invoked. (so every time the function is called it is not reset to 0 rather it keeps its value)
@@ -332,28 +349,95 @@ void DeployDrogueParachute()
  */
 bool CheckLandingConditions()
 {
+  static int stableReadingCount = 0;
+
   // Read current accelerometer data
   mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
 
-// Log the current values for debugging (if necessary)
-#if DEBUG
-  // logStatus("Landing Check", "Acceleration Magnitude", );
-#endif
-  // Check if the acceleration magnitude is near zero (indicating no significant movement)
-  bool isStationary = (mainIMUCurrAccelAxes[Z] <= LANDING_GRAVITY_THRESHOLD);
+  // Check if acceleration is within the landing thresholds
+  bool isLandingAcceleration = (mainIMUCurrAccelAxes[Z] > LANDING_GRAVITY_THRESHOLD_LOW &&
+                                mainIMUCurrAccelAxes[Z] < LANDING_GRAVITY_THRESHOLD_HIGH);
 
-  // If both conditions are met, the rocket is considered landed
-  if (isStationary)
+  if (isLandingAcceleration)
+  {
+    stableReadingCount++;
+  }
+  else
+  {
+    stableReadingCount = 0; // Reset the counter if readings are outside the landing range
+  }
+
+#if DEBUG
+  if (stableReadingCount > 0)
+  {
+    Serial.print("Landing check: Z acceleration: ");
+    Serial.print(mainIMUCurrAccelAxes[Z]);
+    Serial.print(" mg, Stable readings: ");
+    Serial.print(stableReadingCount);
+    Serial.print("/");
+    Serial.println(LANDING_SAMPLE_COUNT);
+  }
+#endif
+
+  // Consider landed if we have enough consistent readings within the landing range
+  if (stableReadingCount >= LANDING_SAMPLE_COUNT)
   {
 #if DEBUG
-    logStatus("Landing Check", "Landing Detected", true);
+    Serial.println("[STATE] Landing confirmed!");
 #endif
     return true;
   }
 
-#if DEBUG
-  logStatus("Landing Check", "Not Landed", false);
-#endif
-
   return false;
+}
+
+/**
+ * @brief Finalizes data collection and prepares for shutdown
+ *
+ * This function is called when the rocket has landed. It ensures all
+ * data is properly saved to the SD card, transmits a final status message,
+ * and prepares the system for shutdown or low-power mode.
+ */
+void DumpData()
+{
+  static bool dataFinalized = false;
+
+  // Only run this once
+  if (!dataFinalized)
+  {
+    // Stop data collection
+    dataCollectionActive = false;
+
+    // Transmit final status
+    String finalStatus = "AT+SEND=2,14,FLIGHT COMPLETE";
+    Serial.println(finalStatus);
+
+    // Save final status if SD card available
+    if (sd_card_available)
+    {
+      // Write a final entry with conclusion timestamp
+      logFile = SD.open("flight.txt", FILE_WRITE);
+      if (logFile)
+      {
+        logFile.println("FLIGHT SUMMARY");
+        logFile.print("Total flight time (s): ");
+        logFile.println(timer * (interval / 1000.0)); // Convert to seconds
+        logFile.println("Flight state: LANDED");
+        logFile.println("Data collection complete");
+        logFile.println(finalStatus);
+        logFile.println("END OF DATA");
+        logFile.close();
+      }
+      else
+      {
+        Serial.println("Error opening flight.txt for final entry");
+      }
+    }
+
+    // Set flag to indicate data has been finalized
+    dataFinalized = true;
+
+    // Send confirmation message
+    Serial.println("Data collection finalized, safe to power off");
+  }
 }

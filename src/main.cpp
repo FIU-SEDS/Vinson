@@ -55,14 +55,14 @@ void loop()
   case APOGEE:
     if (CheckDrogueDeployment())
     {
-      currentState = DROGUE_DEPLOY;
+      currentState = MAIN_DEPLOY;
     }
     break;
 
-  case DROGUE_DEPLOY:
-    DeployDrogueParachute();
-    currentState = MAIN_DEPLOY;
-    break;
+    // case DROGUE_DEPLOY:
+    //   DeployDrogueParachute();
+    //   currentState = MAIN_DEPLOY;
+    //   break;
 
   case MAIN_DEPLOY:
 
@@ -74,8 +74,6 @@ void loop()
 
   case LANDED:
     DumpData(); // TODO Uses SD card to save all data and stop writing
-
-    // implement variable or function that stops the continuing writing of data
     break;
   }
 }
