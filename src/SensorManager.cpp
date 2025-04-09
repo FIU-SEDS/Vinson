@@ -113,7 +113,7 @@ void StartData(RocketState current_state)
 {
   currentMillis = millis();
 
-  while (currentMillis - startMillis >= interval)
+  if (currentMillis - startMillis >= interval)
   {
     startMillis = currentMillis;
     timer++;
@@ -128,22 +128,16 @@ void StartData(RocketState current_state)
 
     if (sd_card_available)
     {
-      Serial.println("SD initialization successful!");
       logFile = SD.open("flight.txt", FILE_WRITE);
       if (logFile)
       {
         logFile.println(command);
         logFile.close();
-        // Serial.println("Logged: " + command);
       }
       else
       {
         Serial.println("Error opening data.txt");
       }
-    }
-    else
-    {
-      Serial.println("SD card initialized failed.");
     }
 
     Serial.println(command);

@@ -73,7 +73,7 @@ void loop()
     break;
 
   case LANDED:
-    void DumpData(); // TODO Uses SD card to save all data and stop writing
+    DumpData(); // TODO Uses SD card to save all data and stop writing
 
     // implement variable or function that stops the continuing writing of data
     break;
