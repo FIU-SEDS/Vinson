@@ -10,7 +10,7 @@
 
 #define CHIP_SELECT_PIN 10 // SD Card Chip Select Digital Pin 10
 
-#define LIFTOFF_GRAVITY_THRESHOLD 2000      // 2g (2000 mg) for definitive launch detection
+#define LIFTOFF_GRAVITY_THRESHOLD 2500      // 2g (2000 mg) for definitive launch detection
 #define APOGEE_GRAVITY_THRESHOLD 650        // 0.65g (650 mg) for microgravity at apogee
 #define LANDING_GRAVITY_THRESHOLD_LOW 500   // 0.5g lower bound for landing
 #define LANDING_GRAVITY_THRESHOLD_HIGH 1500 // 2g upper bound for landing
@@ -99,10 +99,7 @@ void DeployDrogueParachute();
 // Determines if the rocket has landed
 bool CheckLandingConditions();
 
-// Begins data transmission of all the sensors and store it inside the SD Card
+// Begins data transmission of all the sensors and store it inside the SD Card and transmits over radio
 void StartData(RocketState current_state);
-
-// If rocket has landed then stops saving data to SD card and shuts down
-void DumpData();
 
 #endif
