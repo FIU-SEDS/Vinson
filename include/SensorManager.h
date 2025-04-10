@@ -16,8 +16,6 @@
 #define LANDING_GRAVITY_THRESHOLD_HIGH 1500 // 2g upper bound for landing
 #define LANDING_SAMPLE_COUNT 100            // Number of consistent samples to confirm landing
 
-extern bool dataCollectionActive;
-
 #ifdef ARDUINO_SAM_DUE
 #define DEV_I2C Wire1
 #elif defined(ARDUINO_ARCH_STM32)
@@ -52,7 +50,6 @@ enum RocketState
   IDLE,
   BOOST,
   APOGEE,
-  DROGUE_DEPLOY,
   MAIN_DEPLOY,
   LANDED
 };

@@ -59,11 +59,6 @@ void loop()
     }
     break;
 
-    // case DROGUE_DEPLOY:
-    //   DeployDrogueParachute();
-    //   currentState = MAIN_DEPLOY;
-    //   break;
-
   case MAIN_DEPLOY:
 
     if (CheckLandingConditions())
@@ -73,7 +68,7 @@ void loop()
     break;
 
   case LANDED:
-    DumpData(); // TODO Uses SD card to save all data and stop writing
+    // DumpData(); // TODO Uses SD card to save all data and stop writing
     break;
   }
 }

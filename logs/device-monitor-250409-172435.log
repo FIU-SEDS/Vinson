@@ -1,0 +1,545 @@
+AT+MODE=0
+AT+ADDRESS=1
+AT+BAND=915000000
+AT+IPR=115200
+LoRa Transmitter Ready!
+SD initialization successful!
+[INFO] System ready. Awaiting liftoff.
+SD initialization successful!
+AT+SEND=2,30,-57,25,-970,700,-1680,-490,1,1
+SD initialization successful!
+AT+SEND=2,30,-56,25,-971,770,-1680,-490,2,1
+SD initialization successful!
+AT+SEND=2,30,-57,25,-973,700,-1610,-420,3,1
+SD initialization successful!
+AT+SEND=2,30,-57,25,-972,700,-1470,-490,4,1
+SD initialization successful!
+AT+SEND=2,30,-57,24,-972,770,-1400,-490,5,1
+SD initialization successful!
+AT+SEND=2,30,-56,26,-976,770,-1330,-490,6,1
+SD initialization successful!
+AT+SEND=2,30,-59,25,-972,770,-1540,-490,7,1
+SD initialization successful!
+AT+SEND=2,30,-59,26,-971,770,-1400,-490,8,1
+SD initialization successful!
+AT+SEND=2,30,-59,24,-986,770,-1260,-490,9,1
+SD initialization successful!
+AT+SEND=2,31,-59,24,-975,700,-1260,-490,10,1
+SD initialization successful!
+AT+SEND=2,30,-62,26,-980,840,-840,-490,11,1
+SD initialization successful!
+AT+SEND=2,31,-60,23,-979,770,-1050,-490,12,1
+SD initialization successful!
+AT+SEND=2,31,-56,28,-969,700,-1330,-490,13,1
+SD initialization successful!
+AT+SEND=2,31,-59,27,-972,770,-1400,-560,14,1
+SD initialization successful!
+AT+SEND=2,34,-69,28,-975,-700,-41300,-1960,15,1
+SD initialization successful!
+AT+SEND=2,31,-72,28,-962,560,-4480,-630,16,1
+SD initialization successful!
+AT+SEND=2,30,-65,30,-974,770,-910,-420,17,1
+SD initialization successful!
+AT+SEND=2,31,-64,24,-975,630,-1540,-490,18,1
+SD initialization successful!
+AT+SEND=2,31,-64,25,-974,700,-1190,-490,19,1
+SD initialization successful!
+AT+SEND=2,31,-65,27,-974,770,-1400,-560,20,1
+SD initialization successful!
+AT+SEND=2,31,-65,25,-972,770,-1330,-490,21,1
+SD initialization successful!
+AT+SEND=2,31,-66,26,-972,700,-1470,-490,22,1
+SD initialization successful!
+AT+SEND=2,31,-65,25,-971,700,-1400,-490,23,1
+SD initialization successful!
+AT+SEND=2,31,-65,25,-973,700,-1330,-490,24,1
+SD initialization successful!
+AT+SEND=2,31,-65,26,-971,700,-1680,-560,25,1
+SD initialization successful!
+AT+SEND=2,31,-66,25,-970,700,-1400,-560,26,1
+SD initialization successful!
+AT+SEND=2,31,-66,26,-972,770,-1400,-490,27,1
+SD initialization successful!
+AT+SEND=2,31,-63,25,-973,770,-1680,-490,28,1
+SD initialization successful!
+AT+SEND=2,31,-65,25,-970,700,-1540,-490,29,1
+SD initialization successful!
+AT+SEND=2,31,-65,25,-970,630,-1470,-490,30,1
+SD initialization successful!�AT+SEND=2,32,-33,7,-1075,1540,9450,11060,31,1
+SD initialZ�ѥ���succes.V+j
+AT+SEND=2,32,-50,14,-1017,560,-14210,980,32,1
+SD initializatio�Ս���͙ul!
+AT+SEND=2,31,-87,30,-993,1330,10570,910,33,1
+SD initializatZ��Ս�essfu+j
+AT+SEND=2,31,-99,75,-966,70,-1610,-2730,34,1
+SD initializa�Zˁsu���͙ձ!
+AT+SEND=2,30,-88,25,-973,840,-350,-630,35,1
+SD initialization successful!
+AT+SEND=2,33,-103,41,-984,350,-2730,-4480,36,1
+SD initialization s]���͙ձ�
+AT+SEND=2,31,-79,26,-972,770,-1820,-490,37,1
+SD initialization �׍��͙ձ�
+AT+SEND=2,30,-84,25,-965,840,2310,-420,38,1
+SD initialization successful!
+AT+SEND=2,31,-86,25,-956,630,-4830,-560,39,1
+SD initializXW���Ս���͙ձ�
+AT+SEND=2,30,-84,25,-971,840,-980,-420,40,1
+SD initialization successful!
+AT+SEND=2,33,-101,12,-972,700,-1330,-2310,41,1
+SD initializatZ��Սcessf]+j
+AT+SEND=2,31,-95,24,-969,630,-2940,-630,42,1
+SD initialZ�ѥ�n s�����ful�C�AT+SEND=2,32,-98,24,-968,630,-1330,-1610,43,1
+SD initi�+˅ѥon �׍��sfu+j
+AT+SEND=2,31,-97,25,-966,770,-1540,-490,44,1
+SD initiali�ѥ�� su���͙ul�C�AT+SEND=2,31,-94,25,-973,700,-3850,-630,45,1
+SD initializXW���Սce�.ֱ
+AT+SEND=2,31,-83,26,-986,1050,5180,-210,46,1
+SD initiali�ѥ���successV+j
+AT+SEND=2,31,-70,18,-980,70,-2100,-4830,47,1
+SD initialization successful!
+AT+SEND=2,31,-89,26,-970,630,-3220,-560,48,1
+SD initialization successfulHC�AT+SEND=2,30,-97,25,-941,980,6300,-280,49,1
+SD initialization successful!
+AT+SEND=2,31,-90,23,-959,280,-18760,490,50,1
+SD iniW+���atZˁsu���͙�l!C�AT+SEND=2,32,-101,24,-920,1050,3220,1120,51,1
+SD initiali�ѥ�n �W��s�V�+j
+AT+SEND=2,33,-113,45,-965,420,-3990,-2940,52,1
+SD initi�+��io�Ս�es.V�
+AT+SEND=2,32,-99,21,-971,630,-1330,-2240,53,1
+SD initi�+K�ѥon �]�,��fulHC�AT+SEND=2,31,-93,26,-974,560,-5950,-770,54,1
+SD initialization successful!
+AT+SEND=2,32,-89,68,-998,-70,-5810,-7210,55,1
+SD initialization successful!
+AT+SEND=2,30,-89,25,-924,1120,8260,490,56,1
+SD initialization successful!
+AT+SEND=2,32,-73,27,-952,700,-13160,3990,57,1
+SD initializXW���Ս���͙ձ�
+AT+SEND=2,33,-116,5,-968,-770,-770,-16030,58,1
+SD initia+K�ѥ���s]���͙ձ�
+AT+SEND=2,33,-114,-1,-940,8400,2800,-1330,59,1
+SD initializatZ��Ս��ssful!C�AT+SEND=2,33,-98,46,-963,-2380,-4130,6580,60,1
+SD initializatZ��Ս�essfu+j
+AT+SEND=2,32,-101,27,-968,3010,-70,-2100,61,1
+SD initializ�W빁s]���͙�l!
+AT+SEND=2,31,-90,25,-967,700,-2100,-490,62,1
+SD initia�Z�ѥ�� suc��͙�l!
+AT+SEND=2,30,-81,35,-977,770,-560,-140,63,1
+SD initialization successful!
+AT+SEND=2,32,-89,34,-958,630,-4970,-1120,64,1
+SD initi�+˅�ion��W��ssV+j
+AT+SEND=2,31,-92,24,-972,770,-4060,-140,65,1
+SD initialZ/�i��Ս�e��V+*�AT+SEND=2,31,-36,23,-958,1050,-910,-420,66,1
+SD initi��a�Z����cY�.V�+j
+AT+SEND=2,31,-30,24,-960,840,-3430,1890,67,1
+SD initia+˅�io���c宮V+j
+Error opening data.txt
+AT+SEND=2,34,-63,-31,-986,-840,-9730,-8540,68,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-90,48,-948,-280,-3290,1820,69,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-99,42,-966,1260,-1190,-210,70,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-102,39,-965,1680,-980,-770,71,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-101,36,-969,980,-1330,-700,72,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-99,39,-964,1540,-1050,-700,73,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-101,38,-967,700,-1540,-140,74,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-101,35,-969,840,-1400,-560,75,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-101,31,-972,700,-1540,-560,76,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-104,32,-969,0,-1820,-1190,77,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,34,-103,68,-971,-1890,-3290,3640,78,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,34,-120,56,-965,-560,-1680,-3290,79,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,34,-118,68,-966,-210,-1750,-2660,80,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-115,57,-966,840,-1400,-350,81,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,33,-119,83,-963,5180,1190,-2730,82,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,33,-113,48,-969,2380,-560,-1750,83,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-112,51,-969,1470,-980,-560,84,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-113,56,-965,1050,-1470,560,85,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-112,49,-966,1820,-840,-840,86,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-111,51,-967,350,-1750,-420,87,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-111,50,-964,980,-1330,-490,88,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-109,50,-961,-350,-2100,140,89,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,36,-124,37,-965,-2380,-1400,-13790,90,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-89,50,-951,-630,5530,-5320,91,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-89,55,-948,350,-7840,-9380,92,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,30,-77,26,-977,1260,700,5530,93,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-63,49,-969,70,2660,-13790,94,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,33,-91,29,-990,2450,-4690,16100,95,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-85,34,-974,560,-1610,-2730,96,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-97,26,-971,840,-1400,-420,97,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-93,23,-974,490,-2240,-1610,98,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,34,-84,18,-1020,10990,-350,-3640,99,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,39,-116,-27,-1039,9800,-17430,-10150,100,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,39,-427,-373,-762,79100,-77000,-4130,101,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,39,-669,-616,-307,71890,-74060,-3360,102,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,37,-677,-657,17,33110,-39200,-7910,103,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,36,-698,-701,9,11200,-11060,-4830,104,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-692,-726,60,-1820,70,-560,105,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,35,-713,-709,-17,-18970,280,6020,106,1
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,38,-720,-679,-142,-13790,-7140,6160,107,1
+AT+MODE=0
+AT+ADDRESS=1
+AT+BAND=915000000
+AT+IPR=115200
+LoRa Transmitter Ready!
+SD initialization successful!
+[INFO] System ready. Awaiting liftoff.
+[STATE] Transitioning to BOOST phase.
+[STATE] Transitioning to APOGEE phase.
+SD initialization successful!
+AT+SEND=2,31,-94,26,-967,1120,10290,-140,1,3
+SD initiali�XW빁s]���͙ձ!
+��iU9�2,30,-98,27,-970,560,-1540,-630,2,3
+SD initialization successful!
+AT+SEND=2,32,-114,29,-968,630,-1400,-1400,3,3
+SD initialZ�ѥ��succY�.V+j
+AT+SEND=2,30,-98,26,-970,700,-1400,-560,4,3
+SD initialization successful!
+AT+SEND=2,30,-98,28,-970,630,-1540,-140,5,3
+SD initialization successful!
+AT+SEND=2,30,-98,26,-970,700,-1400,-420,6,3
+SD initialization successful!
+AT+SEND=2,30,-72,7,-973,1470,-1610,5180,7,3
+SD initialization successful!
+AT+SEND=2,32,-102,27,-968,910,-1470,-1890,8,3
+SD initialZ�ѥ�� suc��͙�l!�AT+SEND=2,30,-98,25,-969,350,-1680,-560,9,3
+SD initialization successful!
+AT+SEND=2,32,-99,25,-967,1050,-1120,4060,10,3
+SD initialZ�ѥ�n s�����ful�C�AT+SEND=2,32,-105,28,-968,700,-1610,-350,11,3
+SD initiali�XW���Ս�ess�]+j
+AT+SEND=2,31,-97,27,-968,840,-1400,-490,12,3
+SD initializXW���Ս�es�V�+j
+AT+SEND=2,30,-99,38,-968,490,-1610,420,13,3
+SD initialization successful!
+AT+SEND=2,32,-79,20,-963,-980,-2450,3710,14,3
+SD initia+K�ѥon �׍��sfu+j
+AT+SEND=2,32,-110,17,-967,770,-1750,1260,15,3
+SD initialZ�ѥ�n s]�,��fu�HC�AT+SEND=2,31,-97,29,-969,560,-1610,-560,16,3
+SD initial�ѥ�n �]���sf�+j�AT+SEND=2,31,-90,15,-967,630,-1400,-910,17,6
+SD initiali�ѥ�n s]�l�͙�l!��AT+SEND=2,33,-101,30,-969,1260,-1610,3850,18,6
+SD initiali�XW����cce�.V+j
+AT+SEND=2,29,-66,23,-978,980,6020,280,19,6
+SD initialization successful!
+AT+SEND=2,30,-50,25,-973,910,3640,-280,20,6
+SD initialization successful!
+AT+SEND=2,29,-58,0,-995,0,-21980,-560,21,6
+SD initialization successful!
+AT+SEND=2,31,-97,25,-970,560,-1610,-700,22,6
+SD initia+˅ѥon��W��ss�]+j
+AT+SEND=2,31,-88,27,-983,700,-1190,-560,23,6
+SD initiali�XW����cc宮V+j
+AT+SEND=2,32,-97,39,-968,210,-1400,-4900,24,6
+SD initiX��ti���cce�.V+j
+AT+SEND=2,31,-95,29,-971,700,-1540,-980,25,6
+SD initiali�XW���Ս��ssf]+j
+AT+SEND=2,32,-101,12,-969,980,-1470,1540,26,6
+SD initia�Z���on�Սce�.V+j
+AT+SEND=2,34,-13,35,-958,-490,-13300,-3430,27,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-99,49,-970,490,-1400,-2520,28,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-96,23,-966,770,-1120,-560,29,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-93,27,-974,560,-1820,-1610,30,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,30,-96,24,-971,840,-280,-140,31,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,35,55,-105,-986,-1330,-420,-17850,32,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,34,-62,20,-1040,1400,16520,-1050,33,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,34,16,43,-877,-1190,-52360,15120,34,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-62,14,-955,490,-6370,-1680,35,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-68,23,-965,630,-1190,-2170,36,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-69,25,-970,700,-1890,-560,37,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-69,24,-977,770,-1190,-560,38,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-71,26,-972,770,-2170,-560,39,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,29,-72,25,-972,910,140,-490,40,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,29,-74,26,-969,840,560,-560,41,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-75,25,-973,630,-2380,-560,42,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-75,25,-971,770,-1120,-420,43,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-72,25,-974,700,-1820,-490,44,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-75,25,-972,700,-1960,-560,45,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-75,25,-974,770,-1190,-490,46,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-60,27,-965,420,-2940,-2240,47,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,30,-83,29,-963,350,140,-5600,48,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-86,25,-966,700,-2730,-560,49,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,30,-87,25,-970,770,-910,-560,50,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-83,25,-974,770,-1960,-560,51,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-98,26,-970,700,-1400,-770,52,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-96,26,-970,630,-1470,-420,53,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-98,24,-969,840,-1470,1680,54,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-97,26,-971,700,-1470,-490,55,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-98,25,-969,770,-1400,-490,56,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-98,25,-970,630,-1470,-490,57,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-98,26,-968,700,-1470,-490,58,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-98,25,-970,700,-1470,-490,59,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-97,25,-967,700,-1470,-490,60,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-98,27,-969,630,-1470,-490,61,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-90,-2,-969,420,-1610,-280,62,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-90,32,-968,420,-1540,-2170,63,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-98,25,-968,910,-1260,-630,64,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,35,-84,25,-1024,-490,-18200,-8260,65,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-93,35,-967,770,-1400,-1750,66,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,35,-59,10,-910,-3920,-65660,41930,67,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-97,24,-968,630,-1540,-560,68,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-100,25,-961,1050,-350,-140,69,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,30,-95,28,-969,770,700,-1330,70,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-86,15,-970,700,-1260,-2450,71,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-81,31,-970,1120,3360,1890,72,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-86,31,-973,700,-1470,-490,73,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-96,37,-967,560,-3010,-2590,74,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-98,28,-968,700,-1540,-560,75,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,30,-103,35,-979,1190,2730,70,76,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-79,19,-986,1820,14490,5320,77,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-35,1,-982,350,-5950,-4480,78,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-96,32,-982,980,-2310,2100,79,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,36,-231,158,-1007,1470,26880,-2730,80,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,35,-91,70,-1002,-840,-25620,-5110,81,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-107,43,-962,140,-1890,560,82,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,33,-107,27,-984,-560,-2100,-700,83,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,33,-100,37,-977,1400,-1400,-560,84,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-103,38,-967,2240,210,-1750,85,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-142,52,-995,7140,140,3010,86,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,35,-88,31,-969,-4340,-12250,-6720,87,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,34,-103,48,-962,-1960,-3850,8610,88,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,35,-66,108,-960,-4060,-5110,10150,89,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,34,-119,76,-981,-2590,-5950,5950,90,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-104,38,-970,4550,700,-1260,91,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-99,33,-972,910,-1190,-2310,92,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-84,29,-971,350,-1540,-840,93,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,31,-108,37,-967,3430,-210,560,94,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,35,-18,-59,-977,-560,-1190,-14490,95,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,34,-105,37,-961,-1680,-3430,5250,96,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,36,-104,13,-999,-15330,-11130,7000,97,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,35,-75,-34,-977,-5810,3010,-24220,98,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-105,43,-964,490,-1820,2520,99,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,33,-96,55,-948,-8890,-6650,630,100,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,33,-99,26,-977,1470,-1120,-560,101,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,33,-95,29,-970,560,-1120,-3850,102,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-98,28,-970,700,-1470,-420,103,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-97,26,-974,770,-1470,-490,104,6
+SD initialization successful!
+Error opening data.txt
+AT+SEND=2,32,-99,26,-969,770,-1400,-420,105,6

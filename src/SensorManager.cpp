@@ -24,9 +24,8 @@ unsigned long apogeeStartTime = 0; // Variable to store the last time update was
 unsigned long startMillis;         // some global variables available anywhere in the program
 unsigned long currentMillis;
 const unsigned long interval = 300;
-unsigned int timer = 0;           // Flight Time Elapsed
-bool sdCardAvailable = false;   // SD card detection
-bool dataCollectionActive = true; // SD card flag to stop saving data
+unsigned int timer = 0;       // Flight Time Elapsed
+bool sdCardAvailable = false; // SD card detection
 
 /**
  * @brief Prints out a log message for the state of a given parameter.
@@ -93,64 +92,52 @@ void InitializeLoRa()
   Serial.println("LoRa Transmitter Ready!");
 
   pinMode(CHIP_SELECT_PIN, OUTPUT); // Make sure CS pin is set as output
-  sdCardAvailable = SD.begin(CHIP_SELECT_PIN);
-
-  if (sdCardAvailable)
-  {
-    Serial.println("SD initialization successful!");
-  }
-  else
-  {
-    Serial.println("SD card not detected. Continuing without logging.");
-  }
 
   startMillis = millis();
 }
 
 void StartData(RocketState current_state)
 {
+  String buffer;
+  String command;
 
-  // If data collection has been stopped, don't collect or transmit
-  if (!dataCollectionActive)
-  {
-    return;
-  }
+  // Getting sensor data
+  mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
+  mainIMU.Get_G_Axes(mainIMUCurrGyroAxes);
+
+  timer++;
+
+  // Build data string
+
+  buffer = String(mainIMUCurrAccelAxes[0]) + "," + String(mainIMUCurrAccelAxes[1]) + "," + String(mainIMUCurrAccelAxes[2]) + "," + String(mainIMUCurrGyroAxes[0]) + "," + String(mainIMUCurrGyroAxes[1]) + "," + String(mainIMUCurrGyroAxes[2]) + "," + String(timer) + "," + String(current_state);
+
+  // Create LoRa command
+  command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
 
   // Only process data at specified intervals
   currentMillis = millis();
   if (currentMillis - startMillis >= interval)
   {
     startMillis = currentMillis;
-    timer++;
-
-    // Getting sensor data
-    mainIMU.Get_X_Axes(mainIMUCurrAccelAxes);
-    mainIMU.Get_G_Axes(mainIMUCurrGyroAxes);
-
-    // Build data string
-    String buffer;
-    buffer = String(mainIMUCurrAccelAxes[0]) + "," + String(mainIMUCurrAccelAxes[1]) + "," + String(mainIMUCurrAccelAxes[2]) + "," + String(mainIMUCurrGyroAxes[0]) + "," + String(mainIMUCurrGyroAxes[1]) + "," + String(mainIMUCurrGyroAxes[2]) + "," + String(timer) + "," + String(current_state);
-
-    // Create LoRa command
-    String command = "AT+SEND=2," + String(buffer.length()) + "," + buffer;
-
-    // Log to SD card if available
-    if (sdCardAvailable)
-    {
-      logFile = SD.open("flight.txt", FILE_WRITE);
-      if (logFile)
-      {
-        logFile.println(command);
-        logFile.close();
-      }
-      else
-      {
-        Serial.println("Error opening data.txt");
-      }
-    }
 
     // Always send data over LoRa regardless of SD card status
     Serial.println(command);
+  }
+
+  // Log to SD card if available
+  if (SD.begin(CHIP_SELECT_PIN))
+  {
+    logFile = SD.open("flight.txt", FILE_WRITE);
+    if (logFile)
+    {
+
+      logFile.println(command);
+      logFile.close();
+    }
+    else
+    {
+      Serial.println("Error opening data.txt");
+    }
   }
 }
 
@@ -160,7 +147,9 @@ void StartData(RocketState current_state)
  * This function checks the I2C connection to the Main IMU. If connected, it initializes the IMU,
  * enables the accelerometer and gyroscope, and logs the status of the power-up process.
  *
- * @return Boolean value: true if the Main IMU is successfully powered up, false otherwise.
+ * @return Boolean\
+ *  value: true if the Main IMU   // sdCardAvailable = SD.begin(CHIP_SELECT_PIN);
+
  */
 bool PowerMainIMU()
 {
@@ -389,55 +378,4 @@ bool CheckLandingConditions()
   }
 
   return false;
-}
-
-/**
- * @brief Finalizes data collection and prepares for shutdown
- *
- * This function is called when the rocket has landed. It ensures all
- * data is properly saved to the SD card, transmits a final status message,
- * and prepares the system for shutdown or low-power mode.
- */
-void DumpData()
-{
-  static bool dataFinalized = false;
-
-  // Only run this once
-  if (!dataFinalized)
-  {
-    // Stop data collection
-    dataCollectionActive = false;
-
-    // Transmit final status
-    String finalStatus = "AT+SEND=2,14,FLIGHT COMPLETE";
-    Serial.println(finalStatus);
-
-    // Save final status if SD card available
-    if (sdCardAvailable)
-    {
-      // Write a final entry with conclusion timestamp
-      logFile = SD.open("flight.txt", FILE_WRITE);
-      if (logFile)
-      {
-        logFile.println("FLIGHT SUMMARY");
-        logFile.print("Total flight time (s): ");
-        logFile.println(timer * (interval / 1000.0)); // Convert to seconds
-        logFile.println("Flight state: LANDED");
-        logFile.println("Data collection complete");
-        logFile.println(finalStatus);
-        logFile.println("END OF DATA");
-        logFile.close();
-      }
-      else
-      {
-        Serial.println("Error opening flight.txt for final entry");
-      }
-    }
-
-    // Set flag to indicate data has been finalized
-    dataFinalized = true;
-
-    // Send confirmation message
-    Serial.println("Data collection finalized, safe to power off");
-  }
 }
