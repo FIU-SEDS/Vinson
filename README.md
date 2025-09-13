@@ -2,7 +2,24 @@
 
 SEDS Avionics Team Flight Computer 2024-2025 Season
 
+### Design
+
+<p align="center">
+  <img src="assets/vinson-top.png" alt="Image 1" width="45%" />
+  <img src="assets/vinson-bottom.png" alt="Image 2" width="45%" />
+</p>
+
+### Result
+
+<p align="center">
+  <img src="assets/vinson-top-soldered.png" alt="Image 1" width="45%" />
+  <img src="assets/vinson-bottom-soldered.png" alt="Image 2" width="45%" />
+</p>
+
+---
+
 ### Sensor Libraries Directory:
+**Disclaimer:**Only one sensor library was used because the flash memory was reaching its limit using the ASM330LHH library and the state machine code itself. As a result of computing restraints based on our design choice choosing the Arduino Nano as our microcontroller we decided to not use the barometer or magnetometer with their respective libraries. From this we learned our mistakes and implemented a more powerful microcontroller for the next flight computer being the Orizaba: ![Orizaba Repo](https://github.com/FIU-SEDS/Orizaba)
 
 #### ASM330LHH Main IMU
 
